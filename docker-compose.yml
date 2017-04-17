@@ -1,0 +1,89 @@
+mysql-db:
+    image: mysql
+    hostname: mysql-db
+    ports:
+      - "3306:3306"
+    volumes:
+        - ./data/mysql:/var/lib/mysql
+        - ./data/script:/docker-entrypoint-initdb.d
+    environment:
+        - MYSQL_ROOT_PASSWORD=${DB_ROOT}
+        - MYSQL_DATABASE=${DB_NAME}
+        - MYSQL_USER=${DBP_USER}
+        - MYSQL_PASSWORD=${DBP_PASSWORD}
+
+php-myadmin:
+    image: nazarpc/phpmyadmin
+    links:
+        - mysql-db
+    ports:
+        - "9999:80"
+    environment:
+        - MYSQL_HOST=mysql-db:3306
+        - MYSQL_ROOT_PASSWORD=${DBP_ROOT}
+
+
+api-server:
+    build: .
+    dockerfile: /api/Dockerfile
+    hostname: api-server
+    links:
+        - mysql-db
+    ports:
+        - "9696:80"
+    volumes:
+        - ./api/application:/var/www/application
+        - ./client/public:/var/www/html
+        - ./api/etc/php:/usr/local/etc/php
+#        - ./api/etc/apache/hosts.conf:/etc/apache2/sites-enabled/000-default.conf
+#        - ./api/etc/apache/httpd.conf:/etc/apache2/conf-available/apache2.conf
+#        - ./logs/api:/var/www/logs
+    environment:
+        - ALLOW_OVERRIDE=true
+        - DBP_HOST=mysql-db
+        - DBP_NAME=${DBP_NAME}
+        - DBP_USER=${DBP_USER}
+        - DBP_PASSWORD=${DBP_PASSWORD}
+
+
+web-server:
+    build: .
+    dockerfile: /web/Dockerfile
+    hostname: web-server
+    links:
+        - api-server
+    ports:
+        - "9090:80"
+        - "9485-9495:9485-9495"
+    volumes:
+        - ./web/bin:/usr/web/bin
+        - ./web/src:/usr/web/src
+        - ./web/webpack:/usr/web/webpack
+        - ./web/webpack.aot.config.js:/usr/web/webpack.aot.config.js
+        - ./web/webpack.jit.config.js:/usr/web/webpack.jit.config.js
+        - ./web/package.json:/usr/web/package.json
+        - ./web/tsconfig.json:/usr/web/tsconfig.json
+        - ./web/tslint.json:/usr/web/tslint.json
+    environment:
+        - PROXY_CONTEXT=/api
+        - REST_HOST=api-server
+        - REST_PORT=${SERVER_PORT}
+#    command: brunch watch --env proxy --server --port 80
+    command: jit
+#   command: aot
+
+
+lb:
+    image: haproxy:1.6
+    links:
+        - web-server
+        - api-server
+    ports:
+      - "9000:80"
+
+    volumes:
+        - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    environment:
+        - ALLOW_OVERRIDE=true
+        - API_PORT=9696
+        - WEB_PORT=9090

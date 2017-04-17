@@ -1,0 +1,15 @@
+{
+    "name": "cayman/zarur",
+    "description": "Rest api for decision server",
+    "require": {
+        "slim/slim": "~3.0",
+        "slim/php-view": "~2.0",
+        "monolog/monolog": "~1.0",
+        "illuminate/database": "~5.0",
+        "vlucas/phpdotenv": "~2.0"
+    },
+    "scripts": {
+        "start": "php -S localhost:8880 -t ../public ../public/index.php",
+        "test": "phpunit"
+    }
+}
