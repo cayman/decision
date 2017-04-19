@@ -11,7 +11,7 @@ ADD package.json /usr/web/
 RUN npm install --allow-root
 
 RUN mkdir -p /usr/web/dist
-#
-#ENTRYPOINT ["npm","run"]
-#
-#CMD ["build"]
+
+
+ENTRYPOINT ["npm","run"]
+CMD ["build"]

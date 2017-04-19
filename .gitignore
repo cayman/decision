@@ -9,9 +9,8 @@ react/*.iml
 .idea
 
 logs
-client/public/*.*
 data/mysql
-data/script/*.*
+
 
 api/application/.env
 

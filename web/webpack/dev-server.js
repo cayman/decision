@@ -4,7 +4,7 @@ const restPort = process.env.REST_PORT || '8081';
 
 module.exports = {
   contentBase: './src',
-  port: 9000,
+  port: 80,
   host:'0.0.0.0',
   inline: true,
   historyApiFallback: true,
@@ -14,6 +14,6 @@ module.exports = {
     poll: 500
   },
   proxy: {
-    "/rest": 'http://' + restHost + ':' + restPort,
+    "/rest": 'http://' + restHost + ':' + restPort
   }
 };
