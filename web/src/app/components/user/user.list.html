@@ -1,0 +1,56 @@
+<!--<div class="page-title">-->
+  <!--<h2>Список пользователей</h2>-->
+<!--</div>-->
+
+
+<div class="panel panel-default">
+
+    <div class="panel-heading clearfix">
+        <div class="col-md-4">
+            <search-block [url]="url.USERS" [query]="query" [placeholder]="'Логин, ФИО или email'"></search-block>
+        </div>
+        <div class="col-md-8">
+            <div class="btn-group pull-right media-object">
+                <a type="button" id="addButton" class="btn btn-info" [routerLink]="[url.USERS, 0, 'edit']" >Новый пользователь</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body">
+
+        <error-block [error]="error"></error-block>
+
+        <div id="list" class="row" *ngIf="list">
+
+            <empty-list [items]="list.items"></empty-list>
+
+            <table class="table table-hover" *ngIf="list.items?.length">
+                <thead>
+                    <tr class="active">
+                        <th>Логин</th>
+                        <th>ФИО пользователя</th>
+                        <th>Email</th>
+                        <th>Роли</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of list.items">
+                        <td scope="row">
+                            <a class="openLink" [routerLink]="[url.USERS, user.login]">{{ user.login }}</a>
+                        </td>
+                        <td>{{ user?.name }}</td>
+                        <td>{{ user?.email }}</td>
+                        <td>
+                          <span *ngFor="let role of user?.roles">
+                                <span class="btn btn-default">{{ role.name }}</span>
+                          </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <pagination-block [url]="url.USERS" [query]="query" [paginated]="list"></pagination-block>
+
+</div>

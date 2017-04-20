@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+
+  <div class="panel-heading clearfix">
+    <div class="col-md-8">
+      <search-block [url]="url.USERS" [query]="query" [placeholder]="'Телефон клиента, номер авто, идентификатор парковки'"></search-block>
+    </div>
+    <div class="col-md-8">
+    </div>
+  </div>
+
+  <div class="panel-body">
+
+    <error-block [error]="error"></error-block>
+
+    <div id="list" class="row">
+
+      <div class="col-md-4">
+        <p>Количество новых регистраций пользователей</p>
+        <h1 class="align-center">573</h1>
+        <p>Detail</p>
+      </div>
+      <div class="col-md-4">
+        <p>Количество парковочных сессий за сегодня</p>
+        <h1 class="center-block">10872</h1>
+        <p>Detail</p>
+      </div>
+      <div class="col-md-4">
+        <p>Сумма платежей за сегодня</p>
+        <h1 class="center-block">182736</h1>
+        <p>Detail</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-body">
+
+  </div>
+</div>

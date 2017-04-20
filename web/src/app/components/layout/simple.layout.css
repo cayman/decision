@@ -1,0 +1,33 @@
+:host#main {
+  height:100%;
+  overflow:auto;
+  background-color: #1e344d;
+}
+
+:host .row-offcanvas {
+  height: 100%;
+  height: -webkit-calc(100% - 30px);
+  height: -moz-calc(100% - 30px);
+  height: calc(100% - 30px);
+}
+
+:host .page-title {
+    height: 130px;
+    text-align: center;
+}
+:host .page-title a.navbar-brand {
+    width: 400px;
+    height: 100px;
+    background-image: url('/images/icons/Logo_2x.png');
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-color: #1e344d;
+    display: block;
+    margin: auto;
+    float: none;
+    font-size: 0px;
+}
+:host .jumbotron{	
+    background-color: #1e344d;
+    padding: 0px 90px;
+}

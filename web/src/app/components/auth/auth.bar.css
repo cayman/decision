@@ -1,0 +1,38 @@
+:host a.dropdown-toggle{
+	height: 50px;
+	padding-right: 0px !important;
+    padding-left: 10px !important;
+}
+:host a.dropdown-toggle[href="/profile"] {
+    margin-top: 3px;
+    background-repeat: no-repeat;
+    background-position: 0px 50%;
+    background-size: 40px;
+    padding-left: 50px !important;
+}
+.navbar-inverse :host .navbar-nav>li>a {
+    color: #fff;
+}
+:host a.dropdown-toggle b {
+    line-height: 20px;
+    font-size: 14px;
+    color: #fff;
+    font-weight: normal;
+    display: block;
+    float: left;
+    margin-right: 5px;
+    height: 20px;
+    padding-top: 3px; 
+}
+:host span.glyphicon.glyphicon-log-out {
+    font-size: 16px;
+    line-height: 30px;
+}
+:host .glyphicon-log-out1, .glyphicon-log-in1 {
+    width: 22px;
+    height: 20px;
+    background-image: url('/images/icons/exit_2x.png');
+    background-repeat: no-repeat;
+    background-position: 50% !important;
+    background-size: 22px;
+}

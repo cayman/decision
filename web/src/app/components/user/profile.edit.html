@@ -1,0 +1,84 @@
+<!--<div class="page-title">-->
+  <!--<h2>{{ login ? 'Редактирование пользователя':'Создание пользователя' }}</h2>-->
+<!--</div>-->
+
+<div class="panel panel-default">
+
+    <div class="panel-heading clearfix">
+        <div class="col-md-6">
+            <div class="media-object">
+                <a type="button" id="listButton" class="btn btn-default" [routerLink]="url.PROFILE" >
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Профиль
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="media-object pull-right">
+                 <button type="button" id="saveButton" class="btn btn-info" (click)="save()" *ngIf="form">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!--<pre> {{ form.value | json }} </pre>-->
+    <!--<pre> {{ form.get('login').errors | json }} </pre>-->
+    <!--<pre> {{ form.get('roles').errors | json }} </pre>-->
+
+    <div class="panel-body">
+
+        <error-block [error]="error"></error-block>
+
+        <form *ngIf="form" class="form" [formGroup]="form" novalidate>
+
+            <div class="form-group">
+                <label for="loginField">Логин</label>
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="loginField" placeholder="Login"
+                               formControlName="login">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="emailField">E-mail</label>
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="email" class="form-control" id="emailField" placeholder="Email"
+                               formControlName="email">
+
+                        <div *ngIf="hasError('email')" class="alert alert-danger">
+                            <div [hidden]="!form.hasError('required','email')">
+                                Введите email
+                            </div>
+                            <div [hidden]="!form.hasError('pattern','email')">
+                                Неверный формат email
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="nameField">ФИО</label>
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="nameField" placeholder="FIO"
+                               formControlName="name">
+
+                        <div *ngIf="hasError('name')" class="alert alert-danger">
+                            <div [hidden]="!form.hasError('required','name')">
+                                Введите ФИО
+                            </div>
+                            <div [hidden]="!form.hasError('minlength','name')">
+                                Минимальная длина {{ form.getError('minlength','name')?.requiredLength }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
