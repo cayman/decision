@@ -1,9 +1,19 @@
 from bs4 import BeautifulSoup
+from configparser import SafeConfigParser
 import string
 import sqlite3
 import mysql.connector
 
-with open('/media/sf_downloads/Export.xls') as file_object:
+
+config = SafeConfigParser()
+config.read('config.ini')
+print(config.sections())
+
+xsl_config = config['dev.xsl']
+db_config = config['dev.db']
+print(xsl_config)
+
+with open(xsl_config['file']) as file_object:
 	html_string = file_object.read()
     
 	soup = BeautifulSoup(html_string, 'lxml')
@@ -28,11 +38,15 @@ with open('/media/sf_downloads/Export.xls') as file_object:
 			})
 
 		
-	#conn = sqlite3.connect('company_'+company+'.sqlite')
-	conn = mysql.connector.connect(user='u2262s8598_fa', password='',
-                              host='mysql1.justhost.ru',
-                              database='u2262s8598_fa')
+	conn = mysql.connector.connect(**db_config)
 	cursor = conn.cursor()
+	
+	cursor.execute("""
+			CREATE TABLE IF NOT EXISTS raw_indicator(
+			name           CHAR(50)    NOT NULL,
+			quantity	   CHAR(50),
+			unit		   CHAR(50),
+			category       CHAR(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8""")
 
 	cursor.execute("""
 			CREATE TABLE IF NOT EXISTS raw_data(
@@ -41,14 +55,23 @@ with open('/media/sf_downloads/Export.xls') as file_object:
 			name           CHAR(50)    NOT NULL,		
 			quantity	   CHAR(50),
 			unit		   CHAR(50),
-			value          CHAR(50))""")
+			value          CHAR(50)) ENGINE=InnoDB DEFAULT CHARSET=utf8""")
 	
 	for line in data:
 		year=2000;
+		cursor.execute("""SELECT name FROM raw_indicator 
+			WHERE name=%s AND quantity=%s AND unit=%s """,(line['name'],line['quantity'],line['unit']))
+			
+		if(len(cursor.fetchall())==0):
+			cursor.execute("""INSERT INTO raw_indicator
+				VALUES (%s,%s,%s,%s)""",(line['name'],line['quantity'],line['unit'],''))
+			print('Inserted indicator '+ line['name']+' ('+line['quantity']+','+line['unit']+')')
+
 		for value in line['values']:
 			cursor.execute("""INSERT INTO raw_data
-				VALUES (?,?,?,?,?,?)""",(company,str(year),line['name'],line['quantity'],line['unit'],value))
+				VALUES (%s,%s,%s,%s,%s,%s)""",(company,str(year),line['name'],line['quantity'],line['unit'],value))
 			year +=1
+		print('Inserted data for '+ line['name']+' ('+line['quantity']+','+line['unit']+')')
 				
 	conn.commit()
 				

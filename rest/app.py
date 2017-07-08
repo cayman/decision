@@ -8,16 +8,16 @@ import mysql.connector.pooling
 import dto
 
 app = Flask(__name__)
-dbconfig = {
-  "host" : "mysql1.justhost.ru",
-  "database": "u2262s8598_fa",
-  "user":     "u2262s8598_fa",
-  "password": ""
-}
+
+config = SafeConfigParser()
+config.read('config.ini')
+print(config.sections())
+
+db_config = config['dev.db']
 
 conn = mysql.connector.connect(pool_name = "mypool",
                       pool_size = 6, connection_timeout=1200,
-                      **dbconfig)
+                      **db_config)
 
 @app.route('/')
 def index():
@@ -39,4 +39,4 @@ def get_company_indicators():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+	app.run(debug=True)
