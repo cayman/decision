@@ -1,7 +1,5 @@
-from bs4 import BeautifulSoup
 from configparser import SafeConfigParser
 import string
-import sqlite3
 import mysql.connector
 
 
