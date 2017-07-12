@@ -13,7 +13,7 @@ data/mysql
 
 
 api/application/.env
-
+**/__pycache__
 **/node_modules
 **/vendor
 **/ncp-debug.log
