@@ -12,9 +12,9 @@ for file in glob.glob("*/*.xls"):
     name = parser.parse_name(file)
 
     if name[parser.SECTOR] not in sectors:
-        sectors[name[parser.SECTOR]] = {'count':int(name[parser.SECTOR_COUNT]),'items':1}
+        sectors[name[parser.SECTOR]] = {'companies':int(name[parser.SECTOR_COUNT]),'files':1}
     else:
-        sectors[name[parser.SECTOR]]['items'] +=1
+        sectors[name[parser.SECTOR]]['files'] +=1
     
     print(name)   
     data = parser.read_data(os.path.join(root,file),
@@ -27,4 +27,4 @@ for file in glob.glob("*/*.xls"):
 
 for key,value in sectors.items(): 
     print(key,value)
-    assert value['count']*2==value['items'],'Неверное количество файлов {0} в каталоге сектора {1}'.format(value['items'],key)
+    assert value['companies']*2==value['files'],'Неверное количество файлов {0} в каталоге сектора {1}'.format(value['files'],key)
