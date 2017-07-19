@@ -1,10 +1,13 @@
-def upload_data(connection, companies):
+def upload_data(connection, code, data):
 
     cursor = connection.cursor()
 
-    for company in companies:
 
-        company
+    'company,name':name,
+    'unit':unit,
+    'quantity':quantity,
+    'year':years[i],
+    'value':values[i]
 
 
         for line in data:
@@ -17,10 +20,11 @@ def upload_data(connection, companies):
                         VALUES (%s,%s,%s,%s)""",(line['name'],line['quantity'],line['unit'],''))
                 print('Inserted indicator '+ line['name']+' ('+line['quantity']+','+line['unit']+')')
 
-            for value in line['values']:
+            for key,value in line['values'].items():
                 cursor.execute("""INSERT INTO raw_data
-                        VALUES (%s,%s,%s,%s,%s,%s)""",(company,str(year),line['name'],line['quantity'],line['unit'],value))
+                        VALUES (%s,%s,%s,%s,%s,%s)""",(code,line['name'],line['unit'],line['quantity'],value))
                 year +=1
+
             print('Inserted data for '+ line['name']+' ('+line['quantity']+','+line['unit']+')')
 
     connection.commit()

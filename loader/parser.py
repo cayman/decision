@@ -18,6 +18,7 @@ allow_units = {'R':['руб.','руб./т.','руб./кВт/ч.','руб./кВт
                'U':['$','$/т.','$/кВт/ч.','$/кВт','шт.','%','ед.','куб. м.','т.','Гкал','кВт/ч','кВт','чел.']}
 allow_quantities  = ['тыс.','млн.','млрд.'] #,
 allow_rows_count = 118
+strict_check = False
 
 
 
@@ -73,7 +74,7 @@ def parse_name(path):
 
 
 
-    print('>  ', data)
+    #print('>  ', data)
 
     assert data[COMPANY_ID].isdigit(),'Неверный идентификатор компании "{0}"'.format(data[COMPANY_ID])
     check_company(data[COMPANY_NAME])
@@ -85,13 +86,13 @@ def parse_name(path):
 
 # Парсинг содержимого файла
 def read_data(file,company_name,currency,year_min,year_max):
-    print('{0}:{1},{2}-{3}'.format(company_name,currency,year_min,year_max))
+  
     data=[]
 
     check_company(company_name)
     check_currency(currency)
     years_count = check_years(year_min,year_max)
-    print(year_min,'-',year_max,'за',years_count,'лет')
+    print('{0}:{1},{2}-{3} за период {4} лет'.format(company_name,currency,year_min,year_max,years_count))
 
     with open(file) as file_object:
         html_string = file_object.read()
@@ -103,7 +104,6 @@ def read_data(file,company_name,currency,year_min,year_max):
         assert len(rows)==allow_rows_count,'Неверное количество строк в таблице "{0}"'.format(len(rows))
 
         company = rows[0].find_all('td')[0].get_text().strip()
-        print('Company:'+company_name)
         assert company == company_name,'Несоответствие названии компании "{0}" параметру'.format(company)
 
         years = [th.get_text().strip() for th in rows[1].find_all('th')[1:]]
@@ -111,9 +111,22 @@ def read_data(file,company_name,currency,year_min,year_max):
         if len(years) > years_count:
             assert len(years) == years_count,'Неверное количество колонок с годами "{0}",должно быть "{1}" c {2} по {3}'.format(len(years),years_count,year_min,year_max)
         elif len(years) < years_count:
-            print('Неверное количество колонок с годами "{0}",должно быть "{1}" c {2} по {3}'.format(len(years),years_count,year_min,year_max))
+            print('!!! Неверное количество колонок с годами "{0}",должно быть "{1}" c {2} по {3}'.format(len(years),years_count,year_min,year_max))
+            print(years)
+            assert not strict_check or input('Пропустить?')=='y','Ошибочное число колонок в файле'    
             years_count = len(years)
-
+            
+        periods = [td.get_text().strip() for td in rows[allow_rows_count-1].find_all('td')[1:]]
+        
+        assert len(years) == len(periods),'Периоды не соотвествуют строке с годами {}'.format(periods)     
+        right_periods = [period for period in periods if len(period)>0]   
+        
+        if len(periods) != len(right_periods):
+            print('!!! Присутствуют {0} незаполненных периода {1}'.format(len(periods)-len(right_periods),periods))   
+            assert not strict_check or input('Пропустить?')=='y','Пустые колонки в файле'
+        
+        [period for period in periods if len(period)>0]
+ 
         assert str(year_min) in years[0],'Неверный начальный год "{0}"'.format(years[0])
         assert str(year_max) in years[-1],'Неверный конечный год "{0}"'.format(years[-1])
 
