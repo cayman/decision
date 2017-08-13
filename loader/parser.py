@@ -125,7 +125,6 @@ def read_data(file,company_name,currency,year_min,year_max):
             print('!!! Присутствуют {0} незаполненных периода {1}'.format(len(periods)-len(right_periods),periods))   
             assert not strict_check or input('Пропустить?')=='y','Пустые колонки в файле'
         
-        [period for period in periods if len(period)>0]
  
         assert str(year_min) in years[0],'Неверный начальный год "{0}"'.format(years[0])
         assert str(year_max) in years[-1],'Неверный конечный год "{0}"'.format(years[-1])
