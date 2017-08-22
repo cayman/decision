@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>{{ company.name }}</h2>
+<table>
+    <caption>{{ title }}</caption>
+    <thead>
+        <tr>
+            <th>Индикатор</th>
+            {% for year in years %}
+                <th>{{ year }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for key, value in indicators.items() %}
+        <tr>
+            <th>{{ value.name }}</th>
+            {% for year in years %}
+            <td>{{ value.years[year] }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

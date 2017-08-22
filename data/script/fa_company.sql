@@ -1,0 +1,16 @@
+--
+-- Структура таблицы `fa_company`
+--
+
+CREATE TABLE IF NOT EXISTS `fa_company` (
+  `id` int(11) NOT NULL,
+  `name` varchar(256) NOT NULL,
+  `sector_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `sector_id` (`sector_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

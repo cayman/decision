@@ -28,7 +28,7 @@ for file in glob.glob("*/*.xls"):
 
     if name[parser.SECTOR] not in sectors:
         sector_id += 1
-        sector = { 'id':sector_id, 'name':name[parser.SECTOR] ,'companies':int(name[parser.SECTOR_COUNT]),'files':1};
+        sector = { 'id':sector_id, 'name':name[parser.SECTOR] ,'companies':int(name[parser.SECTOR_COUNT]),'files':1}
         sectors[name[parser.SECTOR]] = sector
         cursor.execute("""INSERT INTO fa_sector
             VALUES (%s,%s)""",(sector['id'],sector['name']))
@@ -56,7 +56,7 @@ for file in glob.glob("*/*.xls"):
             indicators[line['name']] = indicator
             indicators_index.append(indicator)
         else:
-            indicator = indicators[line['name']];
+            indicator = indicators[line['name']]
             if line['unit'] not in indicator['units']:
                indicator['units'].append(line['unit'])
             if line['quantity'] not in indicator['quantities']:
@@ -77,9 +77,9 @@ for indicator in indicators_index:
         
     assert len(indicator['units'])>0 and len(indicator['units'])<=2,'Неверное количество units {0}'.format(indicator['units']) 
     
-    unit1 = indicator['units'][0];
-    unit2 = indicator['units'][1] if len(indicator['units'])>1 else '';
-    quantity = indicator['quantities'][0];
+    unit1 = indicator['units'][0]
+    unit2 = indicator['units'][1] if len(indicator['units'])>1 else ''
+    quantity = indicator['quantities'][0]
     
     cursor.execute("""INSERT INTO fa_indicator
             VALUES (%s,%s,%s,%s,%s)""",(indicator['id'],indicator['name'],
