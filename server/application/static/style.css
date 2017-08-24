@@ -68,6 +68,7 @@ th {
     background: #CAE8EA url(images/bg_header.jpg) no-repeat;
 }
 
+
 td {
     font: 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
     border-right: 1px solid #C1DAD7;
@@ -77,6 +78,14 @@ td {
     color: #4f6b72;
 }
 
+.negative {
+    background-color: #fcc5b0;
+}
+
+td.caption {
+    font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    background-color: #eeeeee;
+}
 
 
 .entries        { list-style: none; margin: 0; padding: 0; }

@@ -5,18 +5,20 @@
     <caption>{{ title }}</caption>
     <thead>
         <tr>
-            <th>Индикатор</th>
+            <td>Название</td>
             {% for year in years %}
-                <th>{{ year }}</th>
+                <td>{{ year }}</td>
             {% endfor %}
         </tr>
     </thead>
     <tbody>
-    {% for key, value in indicators.items() %}
+    {% for indicator_id,indicator in company.indicators.items() %}
         <tr>
-            <th>{{ value.name }}</th>
+            <td nowrap><a href="{{ url_for('get_companies',indicator = indicator.id) }}">{{ indicator.name }}({{ indicator.unit }})</a></td>
             {% for year in years %}
-            <td>{{ value.years[year] }}</td>
+                <td nowrap class="{{ 'negative' if indicator.digit and indicator.years[year] and indicator.years[year]<=0 else '' }}">
+                    <span>{{ indicator.years[year] }}</span>
+                </td>
             {% endfor %}
         </tr>
     {% endfor %}

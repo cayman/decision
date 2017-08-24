@@ -1,20 +1,47 @@
 {% extends "layout.html" %}
 {% block content %}
+
+<div>
+{% for indicator in indicators %}
+<span>{{ indicator.name }}</span>,
+{% endfor %}
+</div>
+
 <table>
     <caption>{{ title }}</caption>
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Название</th>
+            <td>Название</td>
+            {% for year in years %}
+                <td>{{ year }}</td>
+            {% endfor %}
         </tr>
     </thead>
-    <tbody>
-    {% for company in companies %}
-        <tr>
-            <th>{{ company.id }}</th>
-            <td><a href="{{ url_for('get_company',company_id = company.id) }}">{{ company.name }}</a></td>
-        </tr>
+    {% for sectors_id,sector in sectors.items() %}
+        <tbody>
+            <tr>
+                <th colspan="{{ years|length+1 }}">
+                    {{ sector.name }}({{ sector.companies|length }})
+                </th>
+            </tr>
+            {% for company_id,company in sector.companies.items() %}
+                <tr>
+                    <td class="caption" colspan="{{ years|length+1 }}">
+                        <a href="{{ url_for('get_company',company_id = company.id) }}">{{ company.name }}({{ company.indicators|length }})</a>
+                    </td>
+                </tr>
+                {% for indicator_id,indicator in company.indicators.items() %}
+                    <tr>
+                        <td nowrap><a href="{{ url_for('get_companies',indicator = indicator.id) }}">{{ indicator.name }}({{ indicator.unit }})</a></td>
+                        {% for year in years %}
+                            <td nowrap class="{{ 'negative' if indicator.digit and indicator.years[year] and indicator.years[year]<=0 else '' }}">
+                                <span>{{ indicator.years[year] }}</span>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
     {% endfor %}
-    </tbody>
 </table>
 {% endblock %}

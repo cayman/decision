@@ -11,7 +11,7 @@ class Sector(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<Sector %r>' % self.name
+        return '<Sector %r:%r>' % (self.id,self.name)
 
 class Company(db.Model):
     __tablename__ = 'fa_company'
@@ -19,7 +19,7 @@ class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
     sector_id = db.Column(db.Integer, db.ForeignKey('fa_sector.id'))
-    sector = db.relationship('Sector',
+    sector = db.relationship('Sector', lazy='joined',
                              backref=db.backref('fa_company', lazy='dynamic'))
 
     def __init__(self, id, name, sector):
@@ -28,7 +28,7 @@ class Company(db.Model):
         self.sector = sector
 
     def __repr__(self):
-        return '<Company %r>' % self.name
+        return '<Company %r:%r>' % (self.id,self.name)
 
 class Indicator(db.Model):
     __tablename__ = 'fa_indicator'
@@ -48,17 +48,20 @@ class Indicator(db.Model):
         self.quantity = quantity
 
     def __repr__(self):
-        return '<Indicator %r>' % self.name
+        return '<Indicator %r:%r>' % (self.id,self.name)
 
 
 class Value(db.Model):
     __tablename__ = 'fa_value'
 
     company_id = db.Column(db.Integer, db.ForeignKey('fa_company.id'), primary_key=True)
+    company = db.relationship('Company',lazy='joined',
+                              backref=db.backref('fa_company', lazy='dynamic'))
     year = db.Column(db.Integer, primary_key=True)
-    currency = db.Column(db.Integer , primary_key=True)
+    currency = db.Column(db.Integer, primary_key=True)
     indicator_id = db.Column(db.Integer, db.ForeignKey('fa_indicator.id'), primary_key=True)
-    indicator = db.relationship('Indicator',lazy='joined')
+    indicator = db.relationship('Indicator',lazy='joined',
+                                backref=db.backref('fa_indicator', lazy='dynamic'))
     value = db.Column(db.String(32))
 
     def __init__(self, company, year, currency, indicator, value):
@@ -69,4 +72,4 @@ class Value(db.Model):
         self.value = value
 
     def __repr__(self):
-        return '<Value %r>' % self.value
+        return '<Year%r:%r for %r >' % (self.year, self.value, self.indicator)
