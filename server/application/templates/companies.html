@@ -21,22 +21,26 @@
         <tbody>
             <tr>
                 <th colspan="{{ years|length+1 }}">
-                    {{ sector.name }}({{ sector.companies|length }})
+                    {{ sector.name }}({{ sector.count() }})
                 </th>
             </tr>
-            {% for company_id,company in sector.companies.items() %}
+            {% for company in sector.companies() %}
                 <tr>
                     <td class="caption" colspan="{{ years|length+1 }}">
-                        <a href="{{ url_for('get_company',company_id = company.id) }}">{{ company.name }}({{ company.indicators|length }})</a>
+                        <a href="{{ url_for('get_company',company_id = company.id) }}">{{ company.name }}</a>
                     </td>
                 </tr>
-                {% for indicator_id,indicator in company.indicators.items() %}
+                {% for indicator in company.indicators %}
                     <tr>
                         <td nowrap><a href="{{ url_for('get_companies',indicator = indicator.id) }}">{{ indicator.name }}({{ indicator.unit }})</a></td>
                         {% for year in years %}
-                            <td nowrap class="{{ 'negative' if indicator.digit and indicator.years[year] and indicator.years[year]<=0 else '' }}">
-                                <span>{{ indicator.years[year] }}</span>
-                            </td>
+                            {% if year in indicator.years %}
+                                <td nowrap class="{{ 'negative' if indicator.digit and indicator.years[year]<=0 else '' }}">
+                                    <span>{{ indicator.years[year] }}</span>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                 {% endfor %}
