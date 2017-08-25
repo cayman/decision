@@ -3,11 +3,27 @@ from flask import jsonify, request, render_template
 from application import app, db
 from application.models import Sector, Company, Indicator, Value
 from application.dto import SectorDTO, CompanyDTO, IndicatorDTO
-from sqlalchemy import sql
-import string
+import locale
+
+locale.setlocale(locale.LC_ALL, ('RU','UTF8'))
 
 user = { 'nickname': 'Rustem' }
 
+def accept_json():
+    if request.args.get('json'):
+        return True
+    best = request.accept_mimetypes \
+        .best_match(['application/json', 'text/html'])
+    return best == 'application/json' and \
+           request.accept_mimetypes[best] > request.accept_mimetypes['text/html']
+
+@app.template_filter('decimal')
+def price_filter(value):
+    return locale.format('%.4f', value, grouping=True).rstrip('0').rstrip(',')
+
+@app.template_filter('price')
+def price_filter(value):
+    return locale.format('%f', value, grouping=True).rstrip('0').rstrip(',')
 
 @app.route('/')
 @app.route('/index')
@@ -28,20 +44,23 @@ def index():
                            posts = posts)
 
 
-@app.route('/companies',methods=['GET'])
+@app.route('/api/companies',methods=['GET'])
 def get_companies():
     currency_id = request.args.get('currency',1)
-    indicator_ids = request.args.get('indicator','30,56,59,63,41,42').split(',',20)
+    sector_ids = request.args.get('sector').split(',',10) if request.args.get('sector') else None
+    indicator_ids = request.args.get('indicator','30,56,59,60,63,64,41,42,91').split(',',20)
 
     #sql
-    _indicators  = Indicator.query.filter(Indicator.id.in_(indicator_ids)).all()
-    _values  = Value.query.filter(Value.indicator_id.in_(indicator_ids))\
-        .filter(Value.currency==currency_id).order_by(Value.indicator_id).all()
+    filters = [Value.indicator_id.in_(indicator_ids),Value.currency==currency_id]
+    if sector_ids:
+        filters.append(Company.sector_id.in_(sector_ids))
 
+    _values  = Value.query.join(Company).filter(*filters).order_by(Value.indicator_id).all()
 
     companies={}
+    indicators={}
     sectors={}
-    years = []
+    years = set()
 
     for _value in _values:
         _company = _value.company
@@ -49,7 +68,8 @@ def get_companies():
         if _company.id not in companies:
             _sector = _company.sector
             #создание DTO компании
-            company = CompanyDTO(_company,_sector)
+            company = CompanyDTO(_company,_sector,_company.links)
+
             #создание DTO сектора
             if _sector.id not in sectors:
                 sectors[_sector.id] = SectorDTO(_sector)
@@ -60,22 +80,29 @@ def get_companies():
         #добавление значения индикатора в компанию
         companies[_company.id].add_indicator(_value.indicator, _value)
 
+        #добавление индикатора в список
+        if _value.indicator.id not in indicators:
+            indicators[_value.indicator.id] = _value.indicator
+
         #формирование списка лет
-        if _value.year not in years:
-            years.append(_value.year)
+        years.add(_value.year)
 
     #for id, company in companies.items():
     #    print(company)
     #    print(company.indicators)
 
+    if accept_json():
+        return jsonify([company.json() for company in companies.values()])
+
     return render_template("companies.html",
                            title = 'Список компаний',
                            user = user,
-                           years = range(min(years),max(years)+1),
-                           indicators = _indicators,
-                           sectors=sectors)
+                           years = sorted(years),
+                           indicators = indicators.values(),
+                           sectors=sectors.values())
 
-@app.route('/companies/<int:company_id>',methods=['GET'])
+
+@app.route('/api/companies/<int:company_id>',methods=['GET'])
 def get_company(company_id):
     currency_id = request.args.get('currency',1)
 
@@ -84,8 +111,6 @@ def get_company(company_id):
     _values = Value.query.filter(Value.company_id==company_id)\
         .filter(Value.currency==currency_id).order_by(Value.indicator_id).all()
 
-    years = []
-
     #создание DTO компании
     company = CompanyDTO(_company,_company.sector)
 
@@ -93,15 +118,13 @@ def get_company(company_id):
         #добавление значения индикатора
         company.add_indicator(_value.indicator, _value)
 
-        #формирование списка лет
-        if _value.year not in years:
-            years.append(_value.year)
-
     #print(company)
     #print(company.indicators)
+
+    if accept_json():
+        return jsonify(company.json())
 
     return render_template("company.html",
                            title = 'Информация о компании',
                            user = user,
-                           company = company,
-                           years = range(min(years),max(years)))
+                           company = company)

@@ -11,8 +11,25 @@
     </title>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script>
+
+        function copyPast(item,link) {
+            item.select();
+            document.execCommand('copy');
+            window.open(link, '_search');
+        };
+
+        var app = angular.module('Decision', []);
+
+        app.config(['$interpolateProvider', function($interpolateProvider) {
+            $interpolateProvider.startSymbol('{a');
+            $interpolateProvider.endSymbol('a}');
+        }]);
+
+    </script>
 </head>
-<body>
+<body ng-app="Decision">
 
     <div class="container">
 
@@ -37,7 +54,7 @@
             </section>
             <aside class="sidebar">
                 <ul>
-                    <li>Компании</li>
+                    <li><a href="{{ url_for('get_companies') }}">Компании</a></li>
                     <li>Выбор</li>
                 </ul>
             </aside>

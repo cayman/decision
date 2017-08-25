@@ -17,33 +17,41 @@
             {% endfor %}
         </tr>
     </thead>
-    {% for sectors_id,sector in sectors.items() %}
-        <tbody>
+    {% for sector in sectors %}
+        <thead ng-init="sector_opened{{sector.id}} = {{ sectors|length }}<4">
             <tr>
-                <th colspan="{{ years|length+1 }}">
-                    {{ sector.name }}({{ sector.count() }})
+                <th colspan="{{ years|length+1 }}" ng-click="sector_opened{{sector.id}}=!sector_opened{{sector.id}}">
+                    {{ sector.id }} - {{ sector.name }} ({{ sector.count() }})
                 </th>
             </tr>
-            {% for company in sector.companies() %}
+        <thead>
+        <tbody ng-hide="!sector_opened{{sector.id}}">
+            {% for company in sector.companies %}
                 <tr>
                     <td class="caption" colspan="{{ years|length+1 }}">
+                        {{ company.id }}
                         <a href="{{ url_for('get_company',company_id = company.id) }}">{{ company.name }}</a>
+                        {% if company.weight>0 %}
+                            <span class="weight positive">{{ company.weight|decimal }}</span>
+                        {% elif company.weight<0 %}
+                            <span class="weight negative">{{ company.weight|decimal }}</span>
+                        {% endif %}
+
+                        <input onClick="copyPast(this, 'http://mfd.ru/marketdata/search/?q={{ company.name }}' )" type="text" size="90"
+                               value="INSERT INTO `fa_company_link` (`company_id`, `link_id`, `id`) VALUES ('{{ company.id }}', '1', ''), ('{{ company.id }}', '2', ''); /* {{ company.name }} */" />
+
+                        <div class="links">
+                            {% for link in company.links %}
+                                <a href="{{ link.url }}" target="_detail">
+                                    <img src="{{ url_for('static', filename='icon/'+link.icon) }}" height="12px" width="12px" >{{ link.name }}</a>
+                            {% endfor %}
+                        </div>
                     </td>
                 </tr>
-                {% for indicator in company.indicators %}
-                    <tr>
-                        <td nowrap><a href="{{ url_for('get_companies',indicator = indicator.id) }}">{{ indicator.name }}({{ indicator.unit }})</a></td>
-                        {% for year in years %}
-                            {% if year in indicator.years %}
-                                <td nowrap class="{{ 'negative' if indicator.digit and indicator.years[year]<=0 else '' }}">
-                                    <span>{{ indicator.years[year] }}</span>
-                                </td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
+                {% with indicators=company.indicators, years=years %}
+
+                    {% include "part/indicators.html" %}
+                {% endwith %}
             {% endfor %}
         </tbody>
     {% endfor %}
