@@ -20,7 +20,7 @@ class IndicatorDTO:
                 if _value>0:
                     self.__weight += 1
                 elif _value<0:
-                    self.__weight -= len(self.years) if len(self.years)>4 else 5
+                    self.__weight -= len(self.years) if len(self.years)>2 else 3
 
                 self.years[year] = _value
             else:

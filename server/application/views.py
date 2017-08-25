@@ -51,7 +51,8 @@ def get_companies():
     indicator_ids = request.args.get('indicator','30,56,59,60,63,64,41,42,91').split(',',20)
 
     #sql
-    filters = [Value.indicator_id.in_(indicator_ids),Value.currency==currency_id]
+    filters = [Value.currency==currency_id,Company.hidden==0,Company.foreign==0,
+               Value.indicator_id.in_(indicator_ids)]
     if sector_ids:
         filters.append(Company.sector_id.in_(sector_ids))
 
@@ -112,7 +113,7 @@ def get_company(company_id):
         .filter(Value.currency==currency_id).order_by(Value.indicator_id).all()
 
     #создание DTO компании
-    company = CompanyDTO(_company,_company.sector)
+    company = CompanyDTO(_company,_company.sector,_company.links)
 
     for _value in _values:
         #добавление значения индикатора

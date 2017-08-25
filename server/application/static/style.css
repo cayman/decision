@@ -42,8 +42,8 @@ header nav {
     align-items: baseline;
 }
 
-table {
-    width: 700px;
+table.companies {
+    width: 1200px;
     padding: 0;
     margin: 0;
 }
@@ -104,7 +104,7 @@ thead td {
 }
 
 .weight {
-    font: 8px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    font: 7px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
     color: #4f6b72;
 }
 

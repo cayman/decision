@@ -7,7 +7,7 @@
 {% endfor %}
 </div>
 
-<table>
+<table class="companies">
     <caption>{{ title }}</caption>
     <thead>
         <tr>
@@ -37,8 +37,10 @@
                             <span class="weight negative">{{ company.weight|decimal }}</span>
                         {% endif %}
 
-                        <input onClick="copyPast(this, 'http://mfd.ru/marketdata/search/?q={{ company.name }}' )" type="text" size="90"
+                        {% if company.links|length<2 %}
+                            <input onClick="copyPast(this, 'http://mfd.ru/marketdata/search/?q={{ company.name }}' )" type="text" size="80"
                                value="INSERT INTO `fa_company_link` (`company_id`, `link_id`, `id`) VALUES ('{{ company.id }}', '1', ''), ('{{ company.id }}', '2', ''); /* {{ company.name }} */" />
+                        {% endif %}
 
                         <div class="links">
                             {% for link in company.links %}
@@ -53,6 +55,11 @@
                     {% include "part/indicators.html" %}
                 {% endwith %}
             {% endfor %}
+            <tr>
+                <td colspan="{{ years|length+1 }}" ng-click="sector_opened{{sector.id}}=false">
+                    <div class="links">{{ sector.name }}</div>
+                </td>
+            </tr>
         </tbody>
     {% endfor %}
 </table>

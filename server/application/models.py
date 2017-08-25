@@ -52,6 +52,8 @@ class Company(db.Model):
     __tablename__ = 'fa_company'
 
     id = db.Column(db.Integer, primary_key=True)
+    hidden = db.Column(db.Integer)
+    foreign = db.Column(db.Integer)
     name = db.Column(db.String(256))
     sector_id = db.Column(db.Integer, db.ForeignKey('fa_sector.id'))
     sector = db.relationship('Sector', lazy='joined',
