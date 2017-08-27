@@ -3,49 +3,49 @@
 
 <div>
 {% for indicator in indicators %}
-<span>{{ indicator.name }}</span>,
+<span>{$ indicator.name $}</span>,
 {% endfor %}
 </div>
 
 <table class="companies">
-    <caption>{{ title }}</caption>
+    <caption>{$ title $}</caption>
     <thead>
         <tr>
             <td>Название</td>
             {% for year in years %}
-                <td>{{ year }}</td>
+                <td>{$ year $}</td>
             {% endfor %}
         </tr>
     </thead>
     {% for sector in sectors %}
-        <thead ng-init="sector_opened{{sector.id}} = {{ sectors|length }}<4">
+        <thead ng-init="sector_opened{$sector.id$} = {$ sectors|length $}<4">
             <tr>
-                <th colspan="{{ years|length+1 }}" ng-click="sector_opened{{sector.id}}=!sector_opened{{sector.id}}">
-                    {{ sector.id }} - {{ sector.name }} ({{ sector.count() }})
+                <th colspan="{$ years|length+1 $}" ng-click="sector_opened{$sector.id$}=!sector_opened{$sector.id$}">
+                    {$ sector.id $} - {$ sector.name $} ({$ sector.count() $})
                 </th>
             </tr>
         <thead>
-        <tbody ng-hide="!sector_opened{{sector.id}}">
+        <tbody ng-hide="!sector_opened{$sector.id$}">
             {% for company in sector.companies %}
                 <tr>
-                    <td class="caption" colspan="{{ years|length+1 }}">
-                        {{ company.id }}
-                        <a href="{{ url_for('get_company',company_id = company.id) }}">{{ company.name }}</a>
+                    <td class="caption" colspan="{$ years|length+1 $}">
+                        {$ company.id $}
+                        <a href="{$ url_for('get_company',company_id = company.id) $}">{$ company.name $}</a>
                         {% if company.weight>0 %}
-                            <span class="weight positive">{{ company.weight|decimal }}</span>
+                            <span class="weight positive">{$ company.weight|decimal $}</span>
                         {% elif company.weight<0 %}
-                            <span class="weight negative">{{ company.weight|decimal }}</span>
+                            <span class="weight negative">{$ company.weight|decimal $}</span>
                         {% endif %}
 
                         {% if company.links|length<2 %}
-                            <input onClick="copyPast(this, 'http://mfd.ru/marketdata/search/?q={{ company.name }}' )" type="text" size="80"
-                               value="INSERT INTO `fa_company_link` (`company_id`, `link_id`, `id`) VALUES ('{{ company.id }}', '1', ''), ('{{ company.id }}', '2', ''); /* {{ company.name }} */" />
+                            <input onClick="copyPast(this, 'http://mfd.ru/marketdata/search/?q={$ company.name $}' )" type="text" size="80"
+                               value="INSERT INTO `fa_company_link` (`company_id`, `link_id`, `id`) VALUES ('{$ company.id $}', '1', ''), ('{$ company.id $}', '2', ''); /* {$ company.name $} */" />
                         {% endif %}
 
                         <div class="links">
                             {% for link in company.links %}
-                                <a href="{{ link.url }}" target="_detail">
-                                    <img src="{{ url_for('static', filename='icon/'+link.icon) }}" height="12px" width="12px" >{{ link.name }}</a>
+                                <a href="{$ link.url $}" target="_detail">
+                                    <img src="{$ url_for('static', filename='icon/'+link.icon) $}" height="12px" width="12px" >{$ link.name $}</a>
                             {% endfor %}
                         </div>
                     </td>
@@ -56,8 +56,8 @@
                 {% endwith %}
             {% endfor %}
             <tr>
-                <td colspan="{{ years|length+1 }}" ng-click="sector_opened{{sector.id}}=false">
-                    <div class="links">{{ sector.name }}</div>
+                <td colspan="{$ years|length+1 $}" ng-click="sector_opened{$sector.id$}=false">
+                    <div class="links">{$ sector.name $}</div>
                 </td>
             </tr>
         </tbody>

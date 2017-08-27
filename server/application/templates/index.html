@@ -1,7 +1,115 @@
-{% extends "layout.html" %}
-{% block content %}
-<h1>Hi, {{user.nickname}}!</h1>
-{% for post in posts %}
-<div><p>{{post.author.nickname}} says: <b>{{post.body}}</b></p></div>
-{% endfor %}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if title %}
+        <title>{$ title $} - fin resource</title>
+        {% else %}
+        <title>Welcome to fin resource</title>
+        {% endif %}
+    </title>
+
+    <link rel="stylesheet" type="text/css" href="{$ url_for('static', filename='style.css') $}">
+
+    <script src="https://unpkg.com/rxjs@5.4.3/bundles/Rx.min.js"></script>
+    <script src="https://unpkg.com/vue@2.4.2"></script>
+    <script src="https://unpkg.com/vue-router@2.7.0"></script>
+</head>
+<body>
+
+<div class="container" id="decision">
+
+    <header>
+        <nav>
+            <li><a href="#"><h1>ResFin</h1></a></li>
+            <li>
+                <router-link to="/companies">Компании</router-link>
+            </li>
+            <li><a href="#">Link</a></li>
+        </nav>
+
+        {% if not session.logged_in %}
+        <a class="auth">log in</a>
+        {% else %}
+        <a class="auth">log out</a>
+        {% endif %}
+
+    </header>
+
+    <router-view></router-view>
+
+
+    <footer></footer>
+
+</div>
+
+<script type="text/x-template" id="sidebar">
+    <aside class="sidebar">
+        <ul>
+            <li><router-link to="/companies">Компании</router-link></li>
+            <li>Выбор</li>
+        </ul>
+    </aside>
+</script>
+
+<script type="text/x-template" id="page-companies">
+    <div class="main-wrapper">
+        <section class="main">
+
+            <div is="alert-loader" :loading="loading"></div>
+            <div is="alert-error" :error="error"></div>
+
+            <table class="companies">
+                <caption> Список компаний </caption>
+                <thead>
+                    <tr is="years-header-row" title="Название" :years="years"></tr>
+                </thead>
+                <template v-for="(sector,key) in sectors">
+                    <thead>
+                        <tr is="sector-header-row" :sector="sector" :years="years" v-on:toggle="toggleEntity(sector)"></tr>
+                    </thead>
+                    <tbody v-show="sector.opened">
+                        <template v-for="company in sector.companies">
+                            <tr is="company-header-row" :company="company" :years="years"></tr>
+                            <tr is="indicator-row" v-for="indicator in company.indicators" :key="indicator.id" :indicator="indicator" :years="years"></tr>
+                        </template>
+                        <tr is="sector-footer-row" :sector="sector" :years="years" v-on:collapse="collapseEntity(sector)"></tr>
+                    </tbody>
+                </template>
+            </table>
+
+        </section>
+        <aside is="sidebar"></aside>
+    </div>
+</script>
+
+<script type="text/x-template" id="page-company">
+    <div class="main-wrapper">
+        <section class="main">
+
+            <div is="alert-loader" :loading="loading"></div>
+            <div is="alert-error" :error="error"></div>
+
+            <h2>{{ company.name }}</h2>
+            <table class="company">
+                <caption>{{ title }}</caption>
+                <thead>
+                    <tr is="years-header-row" title="Индикатор" :years="company.years"></tr>
+                </thead>
+                <tbody>
+                    <tr is="indicator-row" v-for="indicator in company.indicators" :key="indicator.id" :indicator="indicator" :years="years"></tr>
+                </tbody>
+            </table>
+
+        </section>
+        <aside is="sidebar"></aside>
+    </div>
+</script>
+
+
+{% assets "js_bundle" %}
+<script type="text/javascript" src="{$ ASSET_URL $}"></script>
+{% endassets %}
+</body>
+</html>

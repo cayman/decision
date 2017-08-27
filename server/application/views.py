@@ -25,6 +25,15 @@ def price_filter(value):
 def price_filter(value):
     return locale.format('%f', value, grouping=True).rstrip('0').rstrip(',')
 
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify(error=404, text=str(e)), 404
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return jsonify(error=500, text=str(e)), 500
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -43,6 +52,17 @@ def index():
                            user = user,
                            posts = posts)
 
+@app.route('/api/sectors',methods=['GET'])
+def get_sectors():
+
+    #sql
+    sectors  = Sector.query.all()
+
+    if accept_json():
+        return jsonify([company.json() for company in sectors])
+
+    return render_template("companies.html",
+                           sectors=sectors())
 
 @app.route('/api/companies',methods=['GET'])
 def get_companies():

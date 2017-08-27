@@ -42,7 +42,7 @@ class IndicatorDTO:
             'name':self.name,
             'unit':self.unit,
             'quantity':self.quantity,
-            'digit ':self.digit,
+            'digit':self.digit,
             'years':self.years,
             'weight':self.weight,
         }
