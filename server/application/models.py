@@ -41,9 +41,9 @@ class CompanyLink(db.Model):
     link = db.relationship('Link',lazy='joined')
     id = db.Column(db.Integer)
 
-    def __init__(self, company_id, link, id):
+    def __init__(self, company_id, link_id, id):
         self.company = company_id
-        self.link = link
+        self.link_id = link_id
         self.id = id
 
     def __repr__(self):

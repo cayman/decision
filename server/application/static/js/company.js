@@ -18,6 +18,9 @@ const CompanyPage = {
         // запрашиваем данные когда реактивное представление уже создано
         this.obs = this.fetchData()
     },
+    destroyed () {
+        this.obs.unsubscribe();
+    },
     watch: {
         // в случае изменения маршрута запрашиваем данные вновь
         '$route': 'fetchData'

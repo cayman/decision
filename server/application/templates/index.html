@@ -76,18 +76,18 @@
         <table class="companies">
             <caption> Список компаний </caption>
             <thead>
-                <tr is="years-header-row" title="Название" :years="years"></tr>
+                <tr is="years-header-row" title="Название" :years="companies.years"></tr>
             </thead>
             <template v-for="(sector,key) in companies.sectors">
                 <thead>
-                    <tr is="sector-header-row" :sector="sector" :years="years" v-on:toggle="toggleSector(sector)"></tr>
+                    <tr is="sector-header-row" :sector="sector" :years="companies.years" v-on:toggle="toggleSector(sector)"></tr>
                 </thead>
                 <tbody>
                     <template v-for="company in sector.companies">
-                        <tr is="company-header-row" :company="company" :years="years" :links="links.list"></tr>
-                        <tr is="indicator-row" v-for="indicator in company.indicators" :key="indicator.id" :indicator="indicator" :years="years"></tr>
+                        <tr is="company-header-row" :company="company" :years="companies.years" :links="links.list"></tr>
+                        <tr is="indicator-row" v-for="indicator in company.indicators" :key="indicator.id" :indicator="indicator" :years="companies.years"></tr>
                     </template>
-                    <tr is="sector-footer-row" :sector="sector" :years="years" v-on:collapse="collapseSector(sector)"></tr>
+                    <tr is="sector-footer-row" :sector="sector" :years="companies.years" v-on:collapse="collapseSector(sector)"></tr>
                 </tbody>
             </template>
         </table>

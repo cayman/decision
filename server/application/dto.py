@@ -94,9 +94,13 @@ class CompanyDTO:
         self.__indicators[indicator_row.id].add(value_row.year, value_row.value)
         self.__years.add(value_row.year)
 
+    @staticmethod
+    def create_links(company_link_rows):
+        return [LinkDTO(cl.link, cl.link.company_url, cl.id ) for cl in company_link_rows]
+
     #Добавляем новое значение индикатора
     def add_links(self, company_link_rows):
-        self.__links = [LinkDTO(cl.link, cl.link.company_url, cl.id ) for cl in company_link_rows]
+        self.__links = self.create_links(company_link_rows)
 
     #Упорядоченный список лет
     @property

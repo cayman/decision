@@ -36,4 +36,19 @@ const api = {
         })
         .map(e => e.response);
     },
+    updateCompanyLinks: (companyId,linkId,body) => {
+        const url = `api/companies/${companyId}/links${linkId ? ('/' + linkId) : ''}`;
+        console.log('url:', url);
+        return Rx.Observable
+            .ajax({
+                url,
+                method:'POST',
+                body,
+                crossDomain: true,
+                responseType: 'json',
+                headers:{ 'Content-Type': 'application/json' }
+
+            })
+            .map(e => e.response);
+    }
 };

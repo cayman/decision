@@ -1,7 +1,7 @@
 from flask import jsonify, request, render_template
 
 from application import app, db
-from application.models import Sector, Company, Indicator, Value, Link
+from application.models import Sector, Company, CompanyLink, Indicator, Value, Link
 from application.dto import SectorDTO, CompanyDTO, IndicatorDTO, LinkDTO
 import locale
 
@@ -68,6 +68,40 @@ def get_links():
     _links  = Link.query.all()
     links  = [LinkDTO(link,link.company_url).json() for link in _links]
     return jsonify(links)
+
+
+@app.route('/api/companies/<int:company_id>/links',methods=['POST'])
+def create_link(company_id):
+
+    link = request.get_json()
+    print(link)
+    #sql
+    _companyLink = CompanyLink(company_id,link['id'],link['param'])
+    db.session.add(_companyLink)
+    db.session.commit()
+
+    _companyLinks = CompanyLink.query.filter(CompanyLink.company_id == CompanyLink).all()
+
+    links = CompanyDTO.create_links(_companyLinks)
+
+    return jsonify([link.json() for link in links])
+
+
+@app.route('/api/companies/<int:company_id>/links/<int:link_id>',methods=['POST'])
+def update_link(company_id,link_id):
+
+    link = request.get_json()
+    print(link)
+    #sql
+    _companyLink = CompanyLink(company_id,link['id'],link['param'])
+    db.session.update(_companyLink)
+    db.session.commit()
+
+    _companyLinks = CompanyLink.query.filter(CompanyLink.company_id == CompanyLink).all()
+
+    links = CompanyDTO.create_links(_companyLinks)
+
+    return jsonify([link.json() for link in links])
 
 
 @app.route('/api/companies',methods=['GET'])

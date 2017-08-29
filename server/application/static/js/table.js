@@ -71,7 +71,6 @@ Vue.component('company-links', {
     allowedLinks:function(){
       return this.links.filter(link=>!this.company.links.find(companyLink=>companyLink.id === link.id));
     },
-
   },
   template:`<div class="links">
                 <!--add new link form-->
@@ -80,7 +79,7 @@ Vue.component('company-links', {
                         <option v-for="link0 in allowedLinks" :value="link0">{{ link0.name }}</option>
                     </select>  
                     <input type="text" size="6" v-model.number.trim="linkModel.param" 
-                          @keyup.enter.native="createLink()" @dblclick="openWindow(selected ? selected.search : 'https://www.google.ru/search?q=')"/>
+                          @keyup.enter="createLink()" @dblclick="openWindow(selected ? selected.search : 'https://www.google.ru/search?q=')"/>
                     <button @click="createLink()">Save</button>
                 </span>
                 <!--show exist link-->
@@ -91,22 +90,22 @@ Vue.component('company-links', {
             </div>`,
   methods: {
     toggleAppend: function () {
-      this.linkModel = this.linkModel ? null : { company_id:this.company.id,  _link: null, id:null, param:null };
+      this.linkModel = this.linkModel ? null : { companyId:this.company.id, id:null, param:null };
     },
     openWindow: function (url) {
       console.log('openWindow:',url + this.company.name);
       window.open(url + this.company.name, '_search');
     },
     updateLink:function (link) {
-        link.company_id = this.company.id;
-        console.log('updateLink', link);
-        this.$root.$emit('updateLink', link);
+        link.companyId = this.company.id;
+        console.log('companyLink:update', link);
+        this.$root.$emit('companyLink:update', link);
     },
     createLink:function () {
         if(this.linkModel && this.selected && this.linkModel.param){
           this.linkModel.id = this.selected.id;
-          console.log('createLink',this.linkModel);
-          this.$root.$emit('createLink', this.linkModel);
+          console.log('companyLink:create',this.linkModel);
+          this.$root.$emit('companyLink:create', this.linkModel);
           this.linkModel = null;
         }
     },
@@ -124,7 +123,7 @@ Vue.component('company-link', {
   template:`<span><img :src="icon" height="12px" width="12px" @dblclick="toggleEdit()">
                 <span v-if="linkModel">
                     <input  type="text" size="6" v-model.number.trim="linkModel.param" 
-                        @keyup.enter.native="updateLink()" @dblclick="openWindow()"/> 
+                        @keyup.enter="updateLink()" @dblclick="openWindow()"/> 
                     <button @click="updateLink()">Save</button>         
                 </span>  
                 <a v-else :href="url_param" target="target">

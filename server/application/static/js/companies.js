@@ -14,14 +14,14 @@ const CompaniesPage = {
         }
     },
     computed: {
-        years: function () {
-            return Array.from(new Set(this.companies.list.reduce((years, company)=>
-                years.concat(company.years), []))).sort();
-        },
+
     },
     created () {
         // запрашиваем данные когда реактивное представление уже создано
         this.obs = this.fetchData()
+    },
+    destroyed () {
+        this.obs.unsubscribe();
     },
     watch: {
         // в случае изменения маршрута запрашиваем данные вновь
