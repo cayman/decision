@@ -50,29 +50,102 @@ Vue.component('company-header-row', {
                   <span v-if="company.weight>0" class="weight positive">{{ company.weight }}</span>
                   <span v-else-if="company.weight<0" class="weight negative">{{ company.weight }}</span>
                   
-                  <company-links :links="company.links"></company-links>
+                  <company-links :company="company" ></company-links>
                         
               </td>
-           </tr>`
+           </tr>`,
+  methods: {
+
+  }
 });
 
 Vue.component('company-links', {
-  props: ['links', 'years'],
+  props: ['company'],
+  data () {
+    return {
+      linkNew:null,
+      selected: null,
+    }
+  },
   template:`<div class="links">
-                <company-link v-for="link in links" :key="link.id" :link="link" target="_detail"></company-link>
-            </div>`
+                <span v-if="linkNew">
+                    <select v-model="selected">
+                        <option v-for="l in company.links" :value="l">{{ l.name }}</option>
+                    </select>  
+                    <input type="text" size="6" v-model.number.trim="linkNew.param" 
+                          @keyup.enter.native="createLink()" @dblclick="openWindow(selected ? selected.search : 'https://www.google.ru/search?q=')"/>
+                    <button @click="createLink()">Save</button>
+                </span>
+                
+                <company-link v-for="link in company.links" :key="link.id" :link="link" :name="company.name" @open="openWindow" 
+                    @update="updateLink" target="_detail"></company-link>
+                <span @click="toggleAppend()" >+</span>
+            </div>`,
+  methods: {
+    toggleAppend: function () {
+      this.linkNew = this.linkNew ? null : { company_id:this.company.id,  _link: null, id:null, param:null };
+    },
+    openWindow: function (url) {
+      console.log('openWindow:',url + this.company.name);
+      window.open(url + this.company.name, '_search');
+    },
+    updateLink:function (link) {
+        link.company_id = this.company.id;
+        console.log('updateLink', link);
+        this.$root.$emit('updateLink', link);
+    },
+    createLink:function () {
+        if(this.linkNew && this.selected && this.linkNew.param){
+          this.linkNew.id = this.selected.id;
+          console.log('createLink',this.linkNew);
+          this.$root.$emit('createLink', this.linkNew);
+          this.linkNew = null;
+        }
+    },
+  }
 });
+
 
 Vue.component('company-link', {
   props: ['link', 'target'],
-  template:`<a :href="link.url" target="target">
-                    <img :src="icon" height="12px" width="12px" >{{ link.name }}
-            </a>`,
+  data () {
+    return {
+      linkEdit:null
+    }
+  },
+  template:`<span><img :src="icon" height="12px" width="12px" @dblclick="toggleEdit()">
+                <span v-if="linkEdit">
+                    <input  type="text" size="6" v-model.number.trim="linkEdit.param" 
+                        @keyup.enter.native="updateLink()" @dblclick="openWindow()"/> 
+                    <button @click="updateLink()">Save</button>         
+                </span>  
+                <a v-else :href="url_param" target="target">
+                    {{ link.name }}
+                </a>
+            </span>`,
   computed:{
     icon:function(){
       return 'static/icon/'+this.link.icon;
+    },
+    url_param:function(){
+      return this.link.url+this.link.param;
     }
   },
+  methods: {
+    toggleEdit: function () {
+      this.linkEdit = this.linkEdit ? null : { id:this.link.id, param:this.link.param };
+    },
+    openWindow: function () {
+      this.$emit('open', this.link.search);
+    },
+    updateLink:function () {
+      if(this.linkEdit && this.linkEdit.param) {
+        this.$emit('update', this.linkEdit);
+        this.linkEdit = null;
+      }
+    },
+
+  }
 });
 
 Vue.component('indicator-row', {

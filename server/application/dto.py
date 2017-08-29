@@ -50,15 +50,40 @@ class IndicatorDTO:
     def __repr__(self):
         return '<Indicator %r:%r - %r>' % (self.id,self.name,self.years)
 
-class CompanyDTO:
-    def __init__(self, company_row, sector_row, company_link_rows):
+
+class LinkDTO:
+    def __init__(self, link_rows, url, param):
         self.__indicators = {}
+        self.__years = set()
+        self.id = link_rows.id
+        self.icon = link_rows.icon
+        self.name = link_rows.name
+        self.url = url
+        self.search = link_rows.search_url
+        self.param = param
+
+    def json(self):
+        return {
+            'id':self.id,
+            'name':self.name,
+            'icon':self.icon,
+            'url':self.url,
+            'search':self.search,
+            'param':self.param,
+        }
+
+    def __repr__(self):
+        return '<LinkDTO %r:%r>' % (self.id,self.url)
+
+class CompanyDTO:
+    def __init__(self, company_row, sector_row):
         self.__years = set()
         self.id = company_row.id
         self.name = company_row.name
         self.sector_id = sector_row.id
         self.sector_name = sector_row.name
-        self.__links = [{ 'id':cl.link_id, 'icon':cl.link.icon, 'url':cl.link.company_url + str(cl.id), 'name':cl.link.name } for cl in company_link_rows]
+        self.__indicators = {}
+        self.__links = []
 
     #Добавляем новое значение индикатора
     def add_indicator(self, indicator_row, value_row):
@@ -68,6 +93,10 @@ class CompanyDTO:
         #Добавляем год в индикатор
         self.__indicators[indicator_row.id].add(value_row.year, value_row.value)
         self.__years.add(value_row.year)
+
+    #Добавляем новое значение индикатора
+    def add_links(self, company_link_rows):
+        self.__links = [LinkDTO(cl.link, cl.link.company_url, cl.id ) for cl in company_link_rows]
 
     #Упорядоченный список лет
     @property
@@ -94,7 +123,7 @@ class CompanyDTO:
             'name':self.name,
             'sector_id':self.sector_id,
             'sector_name':self.sector_name,
-            'links':self.links,
+            'links':[link.json() for link in self.__links],
             'years':self.years,
             'indicators':[indicator.json() for indicator in self.indicators],
             'weight':self.weight,

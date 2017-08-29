@@ -8,7 +8,7 @@ const router = new VueRouter({
   ]
 });
 
-Vue.component('sidebar', {
+const vm = Vue.component('sidebar', {
   template:'#sidebar',
 });
 

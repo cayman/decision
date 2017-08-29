@@ -89,7 +89,8 @@ def get_companies():
         if _company.id not in companies:
             _sector = _company.sector
             #создание DTO компании
-            company = CompanyDTO(_company,_sector,_company.links)
+            company = CompanyDTO(_company,_sector)
+            company.add_links(_company.links)
 
             #создание DTO сектора
             if _sector.id not in sectors:
@@ -133,7 +134,8 @@ def get_company(company_id):
         .filter(Value.currency==currency_id).order_by(Value.indicator_id).all()
 
     #создание DTO компании
-    company = CompanyDTO(_company,_company.sector,_company.links)
+    company = CompanyDTO(_company,_company.sector)
+    company.add_links(_company.links)
 
     for _value in _values:
         #добавление значения индикатора
