@@ -1,8 +1,8 @@
 from flask import jsonify, request, render_template
 
 from application import app, db
-from application.models import Sector, Company, Indicator, Value
-from application.dto import SectorDTO, CompanyDTO, IndicatorDTO
+from application.models import Sector, Company, Indicator, Value, Link
+from application.dto import SectorDTO, CompanyDTO, IndicatorDTO, LinkDTO
 import locale
 
 locale.setlocale(locale.LC_ALL, ('RU','UTF8'))
@@ -54,15 +54,21 @@ def index():
 
 @app.route('/api/sectors',methods=['GET'])
 def get_sectors():
-
     #sql
-    sectors  = Sector.query.all()
+    _sectors  = Sector.query.all()
+    sectors = [SectorDTO(sector).json() for sector in _sectors]
+    return jsonify(sectors)
 
-    if accept_json():
-        return jsonify([company.json() for company in sectors])
 
-    return render_template("companies.html",
-                           sectors=sectors())
+
+
+@app.route('/api/links',methods=['GET'])
+def get_links():
+    #sql
+    _links  = Link.query.all()
+    links  = [LinkDTO(link,link.company_url).json() for link in _links]
+    return jsonify(links)
+
 
 @app.route('/api/companies',methods=['GET'])
 def get_companies():

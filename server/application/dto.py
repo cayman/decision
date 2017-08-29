@@ -52,14 +52,14 @@ class IndicatorDTO:
 
 
 class LinkDTO:
-    def __init__(self, link_rows, url, param):
+    def __init__(self, link_rows, url=None, param=None):
         self.__indicators = {}
         self.__years = set()
         self.id = link_rows.id
         self.icon = link_rows.icon
         self.name = link_rows.name
-        self.url = url
         self.search = link_rows.search_url
+        self.url = url
         self.param = param
 
     def json(self):
@@ -80,8 +80,8 @@ class CompanyDTO:
         self.__years = set()
         self.id = company_row.id
         self.name = company_row.name
-        self.sector_id = sector_row.id
-        self.sector_name = sector_row.name
+        self.sectorId = sector_row.id
+        self.sectorName = sector_row.name
         self.__indicators = {}
         self.__links = []
 
@@ -121,8 +121,8 @@ class CompanyDTO:
         return {
             'id':self.id,
             'name':self.name,
-            'sector_id':self.sector_id,
-            'sector_name':self.sector_name,
+            'sectorId':self.sectorId,
+            'sectorName':self.sectorName,
             'links':[link.json() for link in self.__links],
             'years':self.years,
             'indicators':[indicator.json() for indicator in self.indicators],
@@ -152,6 +152,12 @@ class SectorDTO:
     @property
     def companies(self):
         return sorted(self.__companies.values(),key=lambda company: company.weight,reverse=True)
+
+    def json(self):
+        return {
+            'id':self.id,
+            'name':self.name,
+        }
 
     def __repr__(self):
         return '<SectorDTO %r:%r>' % (self.id,self.name)

@@ -23,9 +23,14 @@ app.config.from_object('config.DevelopConfig')
 db = SQLAlchemy(app)
 # инициализируем JS
 assets = Environment(app)
-js = Bundle('js/api.js','js/message.js',
+js = Bundle('js/api.js',
+            'js/message.js',
             'js/table.js',
-            'js/company.js','js/companies.js','js/app.js',
+            'js/sidebar.js',
+            'js/home.js',
+            'js/company.js',
+            'js/companies.js',
+            'js/app.js',
             filters='jsmin', output='gen/packed.js')
 assets.register('js_bundle', js)
 
