@@ -26,12 +26,14 @@
 </template>
 
 <script>
+import { bus,vm } from '../main';
+
 export default {
     name: 'companies-page',
     data () {
         return {
-            companies:sharedStore.companies,
-            links:sharedStore.links,
+            companies: this.$store.state.companies,
+            links: this.$store.state.links,
             expanded:[]
         }
     },
@@ -40,10 +42,7 @@ export default {
     },
     created () {
         // запрашиваем данные когда реактивное представление уже создано
-        this.obs = this.fetchData()
-    },
-    destroyed () {
-        this.obs.unsubscribe();
+        this.fetchData()
     },
     watch: {
         // в случае изменения маршрута запрашиваем данные вновь
@@ -55,7 +54,7 @@ export default {
     // }
     methods: {
         fetchData(){
-            this.$root.fetchCompanies();
+            bus.$emit('companies:fetch');
         },
         toggleSector: function (item) {
             item.opened = !item.opened;
