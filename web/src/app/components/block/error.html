@@ -1,8 +1,0 @@
-<div class="alert alert-danger" role="alert" *ngIf="error">
-    <h5>
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">{{ error.httpStatusCode ||  error.status}}</span>
-        <span *ngIf="error.errorType && error.errorId" aria-hidden="true">{{ error.errorType }}:({{error.errorId}})</span>
-    </h5>
-    <p>{{ error.message || error }}</p>
-    <!--<pre> {{ error | json }} </pre>-->
-</div>
