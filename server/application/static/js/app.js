@@ -149,12 +149,13 @@ new Vue({
         },
         updateCompanyLinks(link,create=false){
             const _companies = this.store.companies;
+            const _company = _companies.map[link.companyId];
+            if(!_company) return null;
+
             _companies.loading = true;
             return api.updateCompanyLinks(link.companyId, create ? null : link.id, link)
                 .do(list =>console.log('list:',list))
-                .do(list => {
-                     _companies[link.companyId].links=list;
-                })
+                .do(list => _company.links=list)
                 .finally(() => _companies.loading = false)
                 .subscribe(result => {
                     console.log('success update company link');

@@ -76,11 +76,11 @@ def create_link(company_id):
     link = request.get_json()
     print(link)
     #sql
-    _companyLink = CompanyLink(company_id,link['id'],link['param'])
+    _companyLink = CompanyLink(company_id,int(link['id']),int(link['param']))
     db.session.add(_companyLink)
     db.session.commit()
 
-    _companyLinks = CompanyLink.query.filter(CompanyLink.company_id == CompanyLink).all()
+    _companyLinks = CompanyLink.query.filter(CompanyLink.company_id == company_id).all()
 
     links = CompanyDTO.create_links(_companyLinks)
 
@@ -93,11 +93,11 @@ def update_link(company_id,link_id):
     link = request.get_json()
     print(link)
     #sql
-    _companyLink = CompanyLink(company_id,link['id'],link['param'])
+    _companyLink = CompanyLink(company_id,int(link['id']),int(link['param']))
     db.session.update(_companyLink)
     db.session.commit()
 
-    _companyLinks = CompanyLink.query.filter(CompanyLink.company_id == CompanyLink).all()
+    _companyLinks = CompanyLink.query.filter(CompanyLink.company_id == company_id).all()
 
     links = CompanyDTO.create_links(_companyLinks)
 

@@ -42,12 +42,12 @@ class CompanyLink(db.Model):
     id = db.Column(db.Integer)
 
     def __init__(self, company_id, link_id, id):
-        self.company = company_id
+        self.company_id = company_id
         self.link_id = link_id
         self.id = id
 
     def __repr__(self):
-        return '<CompanyLink %r:%r>' % (self.company.id, self.id)
+        return '<CompanyLink %r:%r = %r>' % (self.company_id, self.link_id, self.id)
 
 
 class Link(db.Model):
