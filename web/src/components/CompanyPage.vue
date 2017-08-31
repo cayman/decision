@@ -1,16 +1,17 @@
 <template>
     <section class="main">
-        <div is="alert-loader" :loading="company.loading"></div>
-        <div is="alert-error" :error="company.error"></div>
+        <div is="alert-loader" :loading="loading"></div>
+        <div is="alert-error" :error="error"></div>
 
-        <h2>{{ company.model.name }}</h2>
+        <h2>{{ company.name }}</h2>
         <table class="company">
             <caption> Информация о компании </caption>
             <thead>
-            <tr is="years-header-row" title="Индикатор" :years="company.model.years"></tr>
+                <companies-header-row title="Индикатор" :years="company.years"></companies-header-row>
             </thead>
             <tbody>
-            <tr is="indicator-row" v-for="indicator in company.model.indicators" :key="indicator.id" :indicator="indicator" :years="years"></tr>
+                <indicator-row v-for="indicator in company.indicators" :key="indicator.id"
+                               :indicator="indicator" :years="company.years"></indicator-row>
             </tbody>
         </table>
     </section>
@@ -18,15 +19,34 @@
 
 
 <script>
-import { bus,vm } from '../main';
+import { FETCH_COMPANY } from '../core/actions';
+import store from '../core/store';
+import AlertLoader from './AlertLoader.vue'
+import AlertError from './AlertError.vue'
+import CompaniesHeaderRow from './table/CompaniesHeaderRow.vue'
+import IndicatorRow from './table/IndicatorRow.vue'
 
 export default {
     name: 'companies-page',
+    components: {
+        AlertLoader, AlertError, CompaniesHeaderRow, IndicatorRow
+    },
     data () {
         return {
-            company:vm.store.company,
-            links:vm.store.links,
+            company:store.state.company,
+            links:store.state.links,
         }
+    },
+    computed: {
+        company(){
+            return this.companies.model;
+        },
+        loading(){
+            return this.companies.loading;
+        },
+        error(){
+            return this.companies.error;
+        },
     },
     // beforeRouteUpdate (to, from, next) {
     //   // обработка изменений параметров пути...
@@ -42,8 +62,8 @@ export default {
     },
     methods: {
         fetchData(){
-            bus.$emit('company:fetch');
-        }
+            store.commit(FETCH_COMPANY,this.$router.param);
+        },
     }
 };
 </script>

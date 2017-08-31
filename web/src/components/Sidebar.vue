@@ -10,12 +10,14 @@
 </template>
 
 <script>
-import sharedStore from '../store.js';
+import { FETCH_COMPANIES } from '../core/actions';
+import store from '../core/store';
+
 export default {
     name: 'sidebar',
     data () {
         return {
-            sectors:sharedStore.sectors,
+            sectors: store.state.sectors,
         }
     },
     created () {

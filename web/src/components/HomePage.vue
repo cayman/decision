@@ -11,7 +11,7 @@ export default {
     name: 'home-page',
     data () {
         return {
-            intor:'Добро пожаловать',
+            intra:'Добро пожаловать',
         }
     },
     // beforeRouteUpdate (to, from, next) {

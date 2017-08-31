@@ -34,30 +34,47 @@ export default {
 </script>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body            { font-family: sans-serif; }
 
-h1, h2 {
-  font-weight: normal;
-}
+  a, h1, h2       { color: #377ba8; }
+  h1, h2          { font-family: 'Georgia', serif; margin: 0; }
+  h1              { border-bottom: 2px solid #eee; }
+  h2              { font-size: 1.2em; }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  .main-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+  .main {
+    flex: 3;
+    margin-right: 60px;
+  }
+  .sidebar {
+    flex: 1;
+    border: 1px solid #eee;
+  }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
+  @media (max-width: 600px) {
+    .main-wrapper {
+      flex-direction: column;
+    }
+    .main {
+      margin-right: 0;
+      margin-bottom: 60px;
+    }
+  }
 
-a {
-  color: #42b983;
-}
+
+  header {
+    display: flex;
+    justify-content: space-between;
+  }
+  header nav {
+    display: flex;
+    align-items: baseline;
+  }
 </style>

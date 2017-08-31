@@ -1,24 +1,26 @@
 <template>
     <section class="main">
-        <pre>{{ companies.loading }}</pre>
-        <div is="alert-loader" :loading="companies.loading"></div>
-        <div is="alert-error" :error="companies.error"></div>
+        <pre>{{ loading }}</pre>
+        <div is="alert-loader" :loading="loading"></div>
+        <div is="alert-error" :error="error"></div>
 
         <table class="companies">
-            <caption> Список компаний </caption>
+            <caption>Список компаний</caption>
             <thead>
-            <tr is="years-header-row" title="Название" :years="companies.years"></tr>
+                <companies-header-row title="Название" :years="years"></companies-header-row>
             </thead>
-            <template v-for="(sector,key) in companies.sectors">
+            <template v-for="(sector,key) in sectors">
                 <thead>
-                <tr is="sector-header-row" :sector="sector" :years="companies.years" v-on:toggle="toggleSector(sector)"></tr>
+                    <sector-header-row :sector="sector" :years="years" @toggle="toggleSector(sector.id)"></sector-header-row>
                 </thead>
-                <tbody>
-                <template v-for="company in sector.companies">
-                    <tr is="company-header-row" :company="company" :years="companies.years" :links="links.list"></tr>
-                    <tr is="indicator-row" v-for="indicator in company.indicators" :key="indicator.id" :indicator="indicator" :years="companies.years"></tr>
-                </template>
-                <tr is="sector-footer-row" :sector="sector" :years="companies.years" v-on:collapse="collapseSector(sector)"></tr>
+                <tbody ng-show="expanded[sector.id]">
+                    <template v-for="company in sector.companies">
+                        <company-header-row :company="company" :years="years"></company-header-row>
+                        <indicator-row v-for="indicator in company.indicators" :key="indicator.id"
+                                       :indicator="indicator" :years="years"></indicator-row>
+                    </template>
+                    <sector-footer-row :sector="sector" :years="years"
+                                       @collapse="collapseSector(sector.id)"></sector-footer-row>
                 </tbody>
             </template>
         </table>
@@ -26,19 +28,39 @@
 </template>
 
 <script>
-import { bus,vm } from '../main';
+import { FETCH_COMPANIES } from '../core/actions';
+import store from '../core/store';
+import AlertLoader from './AlertLoader.vue'
+import AlertError from './AlertError.vue'
+import CompaniesHeaderRow from './table/CompaniesHeaderRow.vue'
+import SectorHeaderRow from './table/SectorHeaderRow.vue'
+import SectorFooterRow from './table/SectorFooterRow.vue'
+import IndicatorRow from './table/IndicatorRow.vue'
 
 export default {
     name: 'companies-page',
+    components: {
+        AlertLoader, AlertError, CompaniesHeaderRow, SectorHeaderRow, SectorFooterRow, IndicatorRow
+    },
     data () {
         return {
-            companies: this.$store.state.companies,
-            links: this.$store.state.links,
-            expanded:[]
+            companies: store.state.companies,
+            expanded:{}
         }
     },
     computed: {
-
+        years(){
+            return this.companies.years;
+        },
+        sectors(){
+            return this.companies.sectors;
+        },
+        loading(){
+            return this.companies.loading;
+        },
+        error(){
+            return this.companies.error;
+        }
     },
     created () {
         // запрашиваем данные когда реактивное представление уже создано
@@ -54,16 +76,32 @@ export default {
     // }
     methods: {
         fetchData(){
-            bus.$emit('companies:fetch');
+            store.commit(FETCH_COMPANIES);
         },
-        toggleSector: function (item) {
-            item.opened = !item.opened;
-            console.log('entity:', item.id, item.opened ? 'expanded' : 'collapsed');
+        toggleSector: function (id) {
+            this.expanded[id] = ! this.expanded[id];
+            console.log('sector:', id, this.expanded[id] ? 'expanded' : 'collapsed');
         },
-        collapseSector: function (item) {
-            item.opened = false;
-            console.log('entity:', item.id, 'collapsed');
+        collapseSector: function (id) {
+            this.expanded[id] = false;
+            console.log('sector:', id, 'collapsed');
         }
     }
 };
 </script>
+
+
+<style>
+    table.companies {
+        width: 1200px;
+        padding: 0;
+        margin: 0;
+    }
+
+    caption {
+        padding: 0 0 5px 0;
+        width: 700px;
+        font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+        text-align: right;
+    }
+</style>
