@@ -4,15 +4,23 @@
 import { initActions } from './actions'
 
 const state = {
+    urls: {
+        search:'https://www.google.ru/search?q=',
+    },
     sectors:{
         list: [],
         loading: false,
         error: null,
     },
     links: {
-        list:[],
+        list:{},
         loading: false,
         error: null
+    },
+    instrumentsTypes: {
+        list:[],
+        loading: false,
+        error: null,
     },
     companies: {
         map: {},
@@ -21,50 +29,34 @@ const state = {
         model:{},
         loading: false,
         error: null,
-    }
+    },
+
 };
 const loading = (end,error) => end ? (error ?'loaded error' :'loaded  success') :'loading...';
 
+
 const mutations = {
-    sectorsLoading:(end=false,error=null)=>{
-        console.info('Sector',loading(end,error));
-        state.sectors.loading = !end;
-        if(state.sectors.error = error)
+    loading:(name, end=false,error=null)=>{
+        console.info(name,loading(end,error));
+        state[name].loading = !end;
+        if(state[name].error = error)
             console.error(error);
-        console.debug(state.sectors);
+        console.debug(state[name]);
     },
-    linksLoading:(end=false,error=null)=>{
-        console.log('Links',loading(end,error));
-        state.links.loading = !end;
-        if(state.links.error = error)
-            console.error(error);
+    setList:(name, list)=>{
+        state[name].list = list;
     },
-    companiesLoading:(end=false,error=null)=>{
-        console.log('Companies',loading(end,error));
-        state.companies.loading = !end;
-        if(state.companies.error = error)
-            console.error(error);
-        console.debug(state.companies);
+
+
+    setModel:(name, model)=>{
+        state[name].model = model;
     },
-    setLinks:(list)=>{
-        state.links.list = list;
-    },
-    setSectors:(list)=>{
-        state.sectors.list = list;
-    },
-    setCompany:(model)=>{
-        state.companies.model = model;
-    },
-    //create map of companies from list
-    setCompanies:(list)=>{
-        state.companies.map = list.reduce((companies, company)=>{
-            companies[company.id]=company;
-            return companies;
+
+    setMap:(name, list)=>{
+        state[name].map = list.reduce((items, item)=>{
+            items[item.id]=item;
+            return items;
         },{})
-    },
-    //create map of companies from list
-    setCompaniesItemLinks:(companyId,list)=>{
-        state.companies.map[companyId]=list
     },
     extractYears:(companies)=> {
         state.companies.years = Array.from(
@@ -83,7 +75,23 @@ const mutations = {
                 }).companies.push(company);
             return sectors;
         }, {});
-    }
+    },
+
+    updateObjectLink:(item, link)=>{
+        item.links = item.links || [];
+        const index = item.links.findIndex(l=>l.linkId === link.linkId);
+        company.links.splice(index>=0?index:0,index>=0?1:0,link);
+        return item.links.length;
+
+    },
+
+    updateCompanyInstrument:(company, instrument)=>{
+        company.instruments = company.instruments || [];
+        const index = company.instruments.findIndex(i=>i.typeId === instrument.typeId);
+        company.links.splice(index>=0?index:0,index>=0?1:0,instrument);
+        return company.instruments.length;
+
+    },
 };
 
 const actions = initActions(state,mutations);

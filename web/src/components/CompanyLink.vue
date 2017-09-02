@@ -1,46 +1,51 @@
 <template>
     <span>
         <img :src="icon" height="12px" width="12px" @dblclick="toggleEdit()">
-        <span v-if="form">
-            <input  type="text" size="6" v-model.number.trim="form.param"
+        <span v-if="model">
+            <input  type="text" size="6" v-model.number.trim="model.id"
                     @keyup.enter="updateLink()" @dblclick="openWindow()"/>
             <button @click="updateLink()">Save</button>
         </span>
-        <a v-else :href="url_param" target="target">
+        <a v-else :href="companyUrl" target="target">
             {{ link.name }}
         </a>
     </span>
 </template>
 
 <script>
+import {UPDATE_COMPANY_LINK} from '../core/actions';
+import store from '../core/store';
+
 export default {
     name: 'company-link',
-    props: ['link', 'target'],
+    props: ['link', 'companyLink', 'companyName', 'target'],
     data () {
         return {
-            form:null
-        }
+            model:null,
+    }
     },
     computed:{
         icon:function(){
             return 'icon/'+this.link.icon;
         },
-        url_param:function(){
-            return this.link.url+this.link.param;
+        companyUrl:function(){
+            return this.link.companyUrl + this.companyLink.companyId;
+        },
+        searchUrl:function(){
+            return this.link.searchUrl + this.companyName;
         }
     },
     methods: {
         toggleEdit: function () {
-            this.form = this.form ? null : { id:this.link.id, param:this.link.param };
+            this.model = this.model ? null : Object.assign({},this.companyLink);
         },
         openWindow: function () {
-            this.$emit('open', this.link.search);
+            console.log('openWindow:', this.searchUrl);
+            window.open(this.searchUrl, '_search');
         },
         updateLink:function () {
-            if(this.form && this.form.param) {
-                this.$emit('update', this.form);
-                this.form = null;
-            }
+            store.dispatch(UPDATE_COMPANY_LINK, this.model);
+            this.model = null;
         },
 
     }

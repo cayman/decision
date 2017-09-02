@@ -35,5 +35,4 @@ js = Bundle('js/api.js',
 assets.register('js_bundle', js)
 
 import application.views
-import application.models
 

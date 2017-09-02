@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { FETCH_LINKS } from './core/actions';
+import { FETCH_LINKS, FETCH_INSTRUMENT_TYPES } from './core/actions';
 import store from './core/store';
 
 export default {
@@ -68,6 +68,7 @@ export default {
     },
     fetchData(){
       store.dispatch(FETCH_LINKS);
+      store.dispatch(FETCH_INSTRUMENT_TYPES);
     },
   }
 }
