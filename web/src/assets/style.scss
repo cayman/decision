@@ -1,0 +1,84 @@
+$border_color: #C1DAD7;
+$font_color: #4f6b72;
+$table_fonts: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+
+$positive_background:#e4fcdd;
+$negative_background: #fcdee8;
+$zero_background: #fafafa;
+$empty_background: #faedd0;
+
+
+body            { font-family: sans-serif; }
+
+a, h1, h2       { color: #377ba8; }
+h1, h2          { font-family: 'Georgia', serif; margin: 0; }
+h1              { border-bottom: 2px solid #eee; }
+h2              { font-size: 1.2em; }
+
+table {
+  max-width: 1200px;
+  padding: 0;
+  margin: 0;
+
+  caption {
+    padding: 0 0 5px 0;
+    width: 700px;
+    font: italic 11px $table_fonts;
+    text-align: right;
+  }
+
+
+  tr:hover {
+    background-color: #d6e5e5;
+  }
+
+
+  th {
+    font: bold 11px $table_fonts;
+    color: $font_color;
+    border-right: 1px solid $border_color;
+    border-bottom: 1px solid $border_color;
+    border-top: 1px solid $border_color;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 6px 6px 6px 12px;
+    background: #CAE8EA;
+  }
+
+  thead td {
+    font: bold 12px $table_fonts;
+    text-align: center;
+  }
+
+  td {
+    font: 11px $table_fonts;
+    border-right: 1px solid $border_color;
+    border-bottom: 1px solid $border_color;
+    background: #fff;
+    padding: 3px 2px 3px 2px;
+    color: $font_color;
+
+  }
+
+  .empty{
+    background-color: $empty_background;
+  }
+
+  .positive{
+    background-color: $positive_background;
+  }
+
+  .negative{
+    background-color: $negative_background;
+    /*background-color: #fce9e3;*/
+  }
+
+  .zero{
+    background-color: $zero_background;
+  }
+
+}
+
+
+

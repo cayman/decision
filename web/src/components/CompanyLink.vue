@@ -23,7 +23,7 @@ export default {
     },
     computed:{
         icon:function(){
-            return 'static/icon/'+this.link.icon;
+            return 'icon/'+this.link.icon;
         },
         url_param:function(){
             return this.link.url+this.link.param;

@@ -7,6 +7,9 @@
 </template>
 
 <script>
+import { FETCH_SECTORS } from '../core/actions';
+import store from '../core/store';
+
 export default {
     name: 'home-page',
     data () {
@@ -14,13 +17,20 @@ export default {
             intra:'Добро пожаловать',
         }
     },
-    // beforeRouteUpdate (to, from, next) {
-    //   // обработка изменений параметров пути...
-    //   // не забудьте вызывать next()
-    // },
+    beforeRouteUpdate (to, from, next) {
+        console.log('Home page');
+        //   // обработка изменений параметров пути...
+        //   // не забудьте вызывать
+        next();
+    },
     created () {
+        // запрашиваем данные когда реактивное представление уже создано
+        this.fetchData()
     },
     methods: {
+        fetchData(){
+            store.dispatch(FETCH_SECTORS);
+        },
     }
 };
 </script>

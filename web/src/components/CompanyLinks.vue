@@ -21,13 +21,13 @@
 <script>
 import {UPDATE_COMPANY_LINK,CREATE_COMPANY_LINK} from '../core/actions';
 import store from '../core/store';
-import CompaniesLink from '../CompanyLink.vue'
+import CompanyLink from './CompanyLink.vue'
 
 export default {
     name: 'company-links',
     props: ['company'],
     components: {
-        CompaniesLink
+        CompanyLink
     },
     data () {
         return {
@@ -54,15 +54,22 @@ export default {
         },
         updateLink: function (link) {
             link.companyId = this.company.id;
-            store.commit(UPDATE_COMPANY_LINK, link);
+            store.dispatch(UPDATE_COMPANY_LINK, link);
         },
         createLink: function () {
             if (this.form && this.selectedLink && this.form.param) {
                 this.form.id = this.selectedLink.id;
-                store.commit(CREATE_COMPANY_LINK, this.form);
+                store.dispatch(CREATE_COMPANY_LINK, this.form);
                 this.form = null;
             }
         },
     }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+    .links{
+        float:right;width:50%;
+        text-align: right;
+    }
+</style>

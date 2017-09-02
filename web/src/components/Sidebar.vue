@@ -1,7 +1,7 @@
 <template>
     <aside class="sidebar">
         <ul>
-            <li><router-link :to="'companies'">Компании</router-link></li>
+            <li><router-link :to="{ name:'companies'}">Компании</router-link></li>
             <template v-for="sector in sectors.list">
                 <li><router-link :to="{ name: 'companies', query: { sector: sector.id }}">{{ sector.name }}</router-link></li>
             </template>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { FETCH_COMPANIES } from '../core/actions';
+import { FETCH_SECTORS } from '../core/actions';
 import store from '../core/store';
 
 export default {
@@ -26,11 +26,28 @@ export default {
     watch: {
         // в случае изменения маршрута запрашиваем данные вновь
     },
-    // beforeRouteUpdate (to, from, next) {
+     beforeRouteUpdate (to, from, next) {
     //   // обработка изменений параметров пути...
-    //   // не забудьте вызывать next()
-    // }
+        next();
+     },
+    created () {
+        // запрашиваем данные когда реактивное представление уже создано
+        this.fetchData()
+    },
     methods: {
+        fetchData(){
+            store.dispatch(FETCH_SECTORS);
+        },
     }
 };
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+
+    .sidebar {
+        flex: 1;
+        border: 1px solid #eee;
+    }
+
+
+</style>

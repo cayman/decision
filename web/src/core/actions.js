@@ -1,7 +1,7 @@
 /**
  * Created by rustem on 31.08.17.
  */
-import api from './api.js'
+import { GET, POST } from './api.js'
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
@@ -15,9 +15,11 @@ export const UPDATE_COMPANY_LINK='updateCompanyLinks';
 export function initActions(state, mutations) {
     const actions = {
         [FETCH_SECTORS]:()=>{
+            if(state.sectors.list && state.sectors.list.length>0) return;
             mutations.sectorsLoading();
-            return api.getSectors()
+            return GET(`sectors`)
                 .do(list => console.log(FETCH_SECTORS, list))
+                .map(list=>list||[])
                 .do(list => mutations.setSectors(list))
                 .subscribe(result => {
                       mutations.sectorsLoading(true);
@@ -27,8 +29,10 @@ export function initActions(state, mutations) {
         },
         [FETCH_LINKS]:()=>{
             mutations.linksLoading();
-            return api.getLinks()
+            if(state.links.list && state.links.list.length>0) return;
+            return GET(`links`)
                 .do(list => console.log(FETCH_LINKS, list))
+                .map(list=>list||[])
                 .do(list => mutations.setLinks(list))
                 .subscribe(result => {
                       mutations.linksLoading(true);
@@ -38,12 +42,13 @@ export function initActions(state, mutations) {
         },
         [FETCH_COMPANIES]:()=>{
             mutations.companiesLoading();
-            return api.getCompanies()
+            return GET(`companies`)
                 .do(list => console.log(FETCH_COMPANIES, list))
                 .map(list => list ? list.sort((a, b) => b.weight - a.weight) : list)
+                .map(list=>list||[])
                 .do(list => mutations.setCompanies(list))
-                .do(list => mutations.setCompaniesYears(list))
-                .do(list => mutations.setCompaniesSectors(list))
+                .do(list => mutations.extractYears(list))
+                .do(list => mutations.extractSectors(list))
                 .subscribe(result => {
                       mutations.companiesLoading(true);
                   }, error =>
@@ -52,7 +57,7 @@ export function initActions(state, mutations) {
         },
         [CREATE_COMPANY_LINK]:(link)=>{
             mutations.companiesLoading();
-            return api.postLink(link.companyId, null, link)
+            return POST(`companies/${link.companyId}/links`, link)
                 .do(list => console.log(CREATE_COMPANY_LINK, list))
                 .do(list => mutations.setCompaniesItemLinks(link.companyId, list))
                 .subscribe(result => {
@@ -63,7 +68,7 @@ export function initActions(state, mutations) {
         },
         [UPDATE_COMPANY_LINK]:(link)=>{
             mutations.companiesLoading();
-            return api.postLink(link.companyId, link.id, link)
+            return POST(`companies/${link.companyId}/links/${link.linkId}`, link)
                 .do(list => console.log(UPDATE_COMPANY_LINK, list))
                 .do(list => mutations.setCompaniesItemLinks(link.companyId, list))
                 .subscribe(result => {
@@ -74,7 +79,7 @@ export function initActions(state, mutations) {
         },
         [FETCH_COMPANY]:(companyId)=>{
             mutations.companiesLoading();
-            return api.getCompany(companyId)
+            return GET(`companies/${companyId}`)
                 .do(model => console.log(FETCH_COMPANY, model))
                 .do(model => mutations.setCompany(model))
                 .subscribe(result => {

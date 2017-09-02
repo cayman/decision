@@ -11,8 +11,3 @@ export default {
     props: ['title','years']
 }
 </script>
-
-
-<style>
-
-</style>

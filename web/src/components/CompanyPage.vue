@@ -1,7 +1,7 @@
 <template>
     <section class="main">
         <div is="alert-loader" :loading="loading"></div>
-        <div is="alert-error" :error="error"></div>
+        <!--<div is="alert-error" :error="error"></div>-->
 
         <h2>{{ company.name }}</h2>
         <table class="company">
@@ -33,7 +33,7 @@ export default {
     },
     data () {
         return {
-            company:store.state.company,
+            companies:store.state.companies,
             links:store.state.links,
         }
     },
@@ -48,10 +48,12 @@ export default {
             return this.companies.error;
         },
     },
-    // beforeRouteUpdate (to, from, next) {
+    beforeRouteUpdate (to, from, next) {
+        console.log('Companies page');
     //   // обработка изменений параметров пути...
-    //   // не забудьте вызывать next()
-    // },
+    //   // не забудьте вызывать
+        next();
+    },
     created () {
         // запрашиваем данные когда реактивное представление уже создано
         this.fetchData()
@@ -62,8 +64,16 @@ export default {
     },
     methods: {
         fetchData(){
-            store.commit(FETCH_COMPANY,this.$router.param);
+            store.dispatch(FETCH_COMPANY,this.$route.params.companyId);
         },
     }
 };
 </script>
+
+<style lang="scss">
+
+    table.company {
+        width: 1000px;
+    }
+
+</style>

@@ -8,13 +8,8 @@ export default {
     props: ['loading'],
     data(){
         return{
-            icon:'dist/image/ajax-loader.gif'
+            icon:'image/ajax-loader.gif'
         }
     },
 }
 </script>
-
-
-<style>
-
-</style>

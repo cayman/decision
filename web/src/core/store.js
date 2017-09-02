@@ -23,25 +23,28 @@ const state = {
         error: null,
     }
 };
+const loading = (end,error) => end ? (error ?'loaded error' :'loaded  success') :'loading...';
 
 const mutations = {
     sectorsLoading:(end=false,error=null)=>{
-        console.log('Sector ',end ? 'loaded':'loading...');
-        state.sectors.loading = end;
+        console.info('Sector',loading(end,error));
+        state.sectors.loading = !end;
         if(state.sectors.error = error)
             console.error(error);
+        console.debug(state.sectors);
     },
     linksLoading:(end=false,error=null)=>{
-        console.log('Links ',end ? 'loaded':'loading...');
-        state.links.loading = end;
+        console.log('Links',loading(end,error));
+        state.links.loading = !end;
         if(state.links.error = error)
             console.error(error);
     },
     companiesLoading:(end=false,error=null)=>{
-        console.log('Companies ',end ? 'loaded':'loading...');
-        state.companies.loading = end;
+        console.log('Companies',loading(end,error));
+        state.companies.loading = !end;
         if(state.companies.error = error)
             console.error(error);
+        console.debug(state.companies);
     },
     setLinks:(list)=>{
         state.links.list = list;
@@ -63,14 +66,14 @@ const mutations = {
     setCompaniesItemLinks:(companyId,list)=>{
         state.companies.map[companyId]=list
     },
-    setCompaniesYears:(companies)=> {
+    extractYears:(companies)=> {
         state.companies.years = Array.from(
             new Set(companies.reduce((years, company) => years.concat(company.years), []))
         ).sort();
     },
     //create map of sectors from list
-    setCompaniesSectors:(companies)=> {
-        state.companies.years = companies.reduce((sectors, company) => {
+    extractSectors:(companies)=> {
+        state.companies.sectors = companies.reduce((sectors, company) => {
             const id = company.sectorId;
             (sectors[id] = sectors[id] || {
                     id,
@@ -85,10 +88,12 @@ const mutations = {
 
 const actions = initActions(state,mutations);
 
-export default {
-    state,
-    commit:function(name,data){
-        console.debug('commit',name,data);
-        actions.do(name,data);
-    }
+const store = {
+        state,
+        dispatch:function(name,data){
+            console.debug('dispatch',name,data);
+            actions.do(name,data);
+        }
 };
+
+export default store;

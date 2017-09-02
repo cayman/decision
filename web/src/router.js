@@ -5,7 +5,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Sidebar from './components/CompaniesPage.vue'
+import Sidebar from './components/Sidebar.vue'
 import HomePage from './components/HomePage.vue'
 import CompaniesPage from './components/CompaniesPage.vue'
 import CompanyPage from './components/CompanyPage.vue'

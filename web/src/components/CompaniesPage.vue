@@ -2,7 +2,9 @@
     <section class="main">
         <pre>{{ loading }}</pre>
         <div is="alert-loader" :loading="loading"></div>
-        <div is="alert-error" :error="error"></div>
+        <!--<div is="alert-error" :error="error"></div>-->
+
+        <!--<pre>{{ sectors }}</pre>-->
 
         <table class="companies">
             <caption>Список компаний</caption>
@@ -34,13 +36,15 @@ import AlertLoader from './AlertLoader.vue'
 import AlertError from './AlertError.vue'
 import CompaniesHeaderRow from './table/CompaniesHeaderRow.vue'
 import SectorHeaderRow from './table/SectorHeaderRow.vue'
-import SectorFooterRow from './table/SectorFooterRow.vue'
+import CompanyHeaderRow from './table/CompanyHeaderRow.vue'
 import IndicatorRow from './table/IndicatorRow.vue'
+import SectorFooterRow from './table/SectorFooterRow.vue'
+
 
 export default {
     name: 'companies-page',
     components: {
-        AlertLoader, AlertError, CompaniesHeaderRow, SectorHeaderRow, SectorFooterRow, IndicatorRow
+        AlertLoader, AlertError, CompaniesHeaderRow, CompanyHeaderRow, SectorHeaderRow, SectorFooterRow, IndicatorRow
     },
     data () {
         return {
@@ -70,13 +74,15 @@ export default {
         // в случае изменения маршрута запрашиваем данные вновь
         '$route': 'fetchData'
     },
-    // beforeRouteUpdate (to, from, next) {
-    //   // обработка изменений параметров пути...
-    //   // не забудьте вызывать next()
-    // }
+    beforeRouteUpdate (to, from, next) {
+         console.log('Company page');
+         //   // обработка изменений параметров пути...
+         //   // не забудьте вызывать
+         next();
+    },
     methods: {
         fetchData(){
-            store.commit(FETCH_COMPANIES);
+            store.dispatch(FETCH_COMPANIES);
         },
         toggleSector: function (id) {
             this.expanded[id] = ! this.expanded[id];
@@ -91,17 +97,10 @@ export default {
 </script>
 
 
-<style>
+<style rel="stylesheet/scss" lang="scss">
+
     table.companies {
-        width: 1200px;
-        padding: 0;
-        margin: 0;
+        width: 1000px;
     }
 
-    caption {
-        padding: 0 0 5px 0;
-        width: 700px;
-        font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-        text-align: right;
-    }
 </style>
