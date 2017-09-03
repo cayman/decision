@@ -67,15 +67,21 @@ table {
 
   .positive{
     background-color: $positive_background;
+    white-space: nowrap
   }
 
   .negative{
     background-color: $negative_background;
+    white-space: nowrap
     /*background-color: #fce9e3;*/
   }
 
   .zero{
     background-color: $zero_background;
+  }
+
+  .selected {
+    font: bold 11px $table_fonts;
   }
 
 }

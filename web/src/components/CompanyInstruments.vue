@@ -7,10 +7,10 @@
             </select>
             <span>Id</span>
             <input type="text" size="6" v-model.number.trim="model.id"
-                   @dblclick="openWindow(selectedType ? micex.searchUrl : null)"/>
+                   @dblclick="openWindow(selectedType ? rbc.searchUrl : null)"/>
             <span>Code</span>
             <input type="text" size="6" v-model.trim="model.code"
-                   @dblclick="openWindow(selectedType ? rbc.searchUrl : null)"/>
+                   @dblclick="openWindow(selectedType ? micex.searchUrl : null)"/>
             <button @click="createInstrument()">Save</button>
         </span>
 

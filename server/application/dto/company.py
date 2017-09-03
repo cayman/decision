@@ -35,11 +35,11 @@ class CompanyDTO:
         if model:
             self.id = model.id
             self.name = model.name
-            self.sectorId = model.sector_id
+            self.sector_id = model.sector_id
             self.hidden = model.hidden
             self.foreign = model.foreign
             if model.sector:
-                self.sectorName = model.name
+                self.sector_name = model.sector.name
             if model.links:
                 params = {'id':self.id,'companyId':self.id}
                 self.links = [CompanyLinkDTO(link) for link in model.links]
@@ -47,7 +47,7 @@ class CompanyDTO:
         if json:
             self.id = json['id']
             self.name = json['name']
-            self.sectorId = json['sectorId'],
+            self.sector_id = json['sectorId'],
             self.hidden = json['hidden'],
             self.foreign = json['foreign']
 
@@ -81,8 +81,8 @@ class CompanyDTO:
         return {
             'id':self.id,
             'name':self.name,
-            'sectorId':self.sectorId,
-            'sectorName':self.sectorName,
+            'sectorId':self.sector_id,
+            'sectorName':self.sector_name,
             'hidden':self.hidden,
             'foreign':self.foreign,
             'links':[link.json() for link in self.links],

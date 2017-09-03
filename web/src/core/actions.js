@@ -9,6 +9,8 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/observable/of';
 
 export const FETCH_SECTORS='fetchSectors';
+export const COLLAPSE_SECTORS='collapseSectors';
+export const EXPAND_SECTORS='expandSectors';
 export const FETCH_LINKS='fetchLinks';
 export const FETCH_INSTRUMENT_TYPES='fetchInstrumentTypes';
 export const FETCH_COMPANIES='fetchCompanies';
@@ -40,6 +42,18 @@ export function initActions(state, mutations) {
                     mutations.loading(SECTORS,true);
                   }, error =>
                     mutations.loading(SECTORS, true, error)
+                )
+        },
+        [COLLAPSE_SECTORS]:()=>{
+            mutations.collapse(SECTORS);
+            return GET(`sectors`)
+                .do(list => console.log(FETCH_SECTORS, list))
+                .map(list=>list||[])
+                .do(list => mutations.setList(SECTORS,list))
+                .subscribe(result => {
+                        mutations.loading(SECTORS,true);
+                    }, error =>
+                        mutations.loading(SECTORS, true, error)
                 )
         },
         [FETCH_LINKS]:()=>{

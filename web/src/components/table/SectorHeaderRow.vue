@@ -1,8 +1,8 @@
 <template>
     <tr class="sector_header">
-        <th :colspan="years.length+1" @click="toggleSector">
+        <th :colspan="years.length+1" >
             <span>{{ sector.id }}</span>
-            - <span>{{ sector.name }} ({{ sector.companies.length }})</span>
+            - <span @click="nameClick()">{{ sector.name }} - {{ sector.expanded }}({{ sector.companies.length }})</span>
         </th>
     </tr>
 </template>
@@ -12,8 +12,9 @@ export default {
     name:'sector-header-row',
     props: ['sector','years'],
     methods: {
-        toggleSector: function () {
-            this.$emit('toggle')
+        nameClick: function () {
+            console.log('nameClick',this.sector.name);
+            this.$emit('name-click',this.sector);
         }
     },
 }

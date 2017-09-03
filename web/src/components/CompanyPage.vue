@@ -10,8 +10,11 @@
                 <companies-header-row title="Индикатор" :years="company.years"></companies-header-row>
             </thead>
             <tbody>
-                <indicator-row v-for="indicator in company.indicators" :key="indicator.id"
-                               :indicator="indicator" :years="company.years"></indicator-row>
+                <template v-for="indicator in company.indicators">
+                    <indicator-diagram-row v-if="indicator.digit && indicator.diagram" @name-click="toggleDiagram(indicator)"
+                                           :indicator="indicator" :years="company.years"></indicator-diagram-row>
+                    <indicator-row :indicator="indicator" :years="company.years" @name-click="toggleDiagram(indicator)"></indicator-row>
+                </template>
             </tbody>
         </table>
     </section>
@@ -25,11 +28,12 @@ import AlertLoader from './AlertLoader.vue'
 import AlertError from './AlertError.vue'
 import CompaniesHeaderRow from './table/CompaniesHeaderRow.vue'
 import IndicatorRow from './table/IndicatorRow.vue'
+import IndicatorDiagramRow from './table/IndicatorDiagramRow.vue'
 
 export default {
     name: 'companies-page',
     components: {
-        AlertLoader, AlertError, CompaniesHeaderRow, IndicatorRow
+        AlertLoader, AlertError, CompaniesHeaderRow, IndicatorRow, IndicatorDiagramRow
     },
     data () {
         return {
@@ -66,6 +70,10 @@ export default {
         fetchData(){
             store.dispatch(FETCH_COMPANY,this.$route.params.companyId);
         },
+        toggleDiagram: function (indicator) {
+            this.$set(indicator,'diagram',!indicator.diagram);
+            console.log('diagram:', indicator.id, 'expanded',indicator.diagram);
+        }
     }
 };
 </script>

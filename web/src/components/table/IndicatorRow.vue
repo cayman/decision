@@ -1,29 +1,35 @@
 <template>
-    <tr class="company_indicator" v-once>
-        <td class="indicator_name" nowrap><a>{{ indicator.name }}</a>
+    <tr class="company_indicator">
+        <td class="indicator_name" nowrap>
+            <a @click="nameClick()" :class="{ selected:indicator.diagram }">{{ indicator.id }} - {{ indicator.name }}</a>
             <span class="unit">({{ unit }})</span>
             <span class="weight positive" v-if="indicator.weight>0">{{ indicator.weight }}</span>
             <span class="weight negative" v-else-if="indicator.weight<0" >{{ indicator.weight }}</span>
         </td>
         <indicator-value-cell  v-for="year in years" :key="year" :value="indicator.years[year]"
-                              :digit="indicator.digit" :last="year == years[years.length - 1]"></indicator-value-cell>
+                              :selected="indicator.diagram" :digit="indicator.digit" :last="year == years[years.length - 1]"></indicator-value-cell>
     </tr>
 </template>
 
 <script>
-import IndicatorValueCell from './IndicatorValueCell.vue'
-export default {
-    name:'indicator-row',
-    components: {
-        IndicatorValueCell
-    },
-    props: ['indicator','years'],
-    computed: {
-        unit(){
-            return this.indicator.quantity || '' + this.indicator.unit;
+    import IndicatorValueCell from './IndicatorValueCell.vue'
+    export default {
+        name:'indicator-row',
+        props: ['indicator','years'],
+        components: {
+            IndicatorValueCell
+        },
+        computed: {
+            unit(){
+                return this.indicator.quantity || '' + this.indicator.unit;
+            }
+        },
+        methods:{
+            nameClick(){
+                this.$emit('name-click',this.indicator);
+            }
         }
     }
-}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

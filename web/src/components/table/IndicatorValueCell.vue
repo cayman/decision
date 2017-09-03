@@ -1,13 +1,13 @@
 <template>
-    <td nowrap :class="{ empty, digit, negative, zero }">
-    <span>{{ value }}</span>
-</td>
+    <td :class="{ empty, digit, negative, zero, selected }">
+        <span>{{ value }}</span>
+    </td>
 </template>
 
 <script>
 export default {
     name:'indicator-value-cell',
-    props: ['value','digit','last'],
+    props: ['value','digit','last','selected'],
     computed: {
         empty(){
             return !this.value && this.last;
@@ -21,3 +21,8 @@ export default {
     }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+
+
+</style>

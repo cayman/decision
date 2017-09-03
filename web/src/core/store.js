@@ -2,6 +2,7 @@
  * Created by rustem on 31.08.17.
  */
 import { initActions } from './actions'
+import Vue from 'vue';
 
 const state = {
     urls: {
@@ -78,17 +79,17 @@ const mutations = {
     },
 
     updateObjectLink:(item, link)=>{
-        item.links = item.links || [];
+        if(!item.links) Vue.set(item,'links',[]);
         const index = item.links.findIndex(l=>l.linkId === link.linkId);
-        company.links.splice(index>=0?index:0,index>=0?1:0,link);
+        item.links.splice(index>=0?index:0,index>=0?1:0,link);
         return item.links.length;
 
     },
 
     updateCompanyInstrument:(company, instrument)=>{
-        company.instruments = company.instruments || [];
+        if(!company.instruments) Vue.set(company,'instruments',[]);
         const index = company.instruments.findIndex(i=>i.typeId === instrument.typeId);
-        company.links.splice(index>=0?index:0,index>=0?1:0,instrument);
+        company.instruments.splice(index>=0?index:0,index>=0?1:0,instrument);
         return company.instruments.length;
 
     },

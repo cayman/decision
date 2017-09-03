@@ -29,7 +29,7 @@ export default {
             return 'icon/'+this.link.icon;
         },
         companyUrl:function(){
-            return this.link.companyUrl + this.companyLink.companyId;
+            return this.link.companyUrl + this.companyLink.id;
         },
         searchUrl:function(){
             return this.link.searchUrl + this.companyName;

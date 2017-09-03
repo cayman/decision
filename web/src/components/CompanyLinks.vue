@@ -40,8 +40,10 @@ export default {
     },
     computed: {
         allowedLinks: function () {
-            return this.links.filter(link =>
+            const links = this.links.filter(link =>
               !this.company.links.find(companyLink => companyLink.linkId === link.id));
+            this.selectedLink = links.length>0 ? links[0] : null;
+            return links;
         },
     },
 

@@ -13,17 +13,22 @@
             </thead>
             <template v-for="(sector,key) in sectors">
                 <thead>
-                    <sector-header-row :sector="sector" :years="years" @toggle="toggleSector(sector.id)"></sector-header-row>
+                    <sector-header-row :sector="sector" :years="years" @name-click="toggleSector(sector)"></sector-header-row>
                 </thead>
-                <tbody ng-show="expanded[sector.id]">
-                    <template v-for="company in sector.companies">
+                <template v-if="sector.expanded">
+                    <tbody v-for="company in sector.companies">
                         <company-header-row :company="company" :years="years"></company-header-row>
-                        <indicator-row v-for="indicator in company.indicators" :key="indicator.id"
-                                       :indicator="indicator" :years="years"></indicator-row>
-                    </template>
-                    <sector-footer-row :sector="sector" :years="years"
-                                       @collapse="collapseSector(sector.id)"></sector-footer-row>
-                </tbody>
+                        <template v-for="indicator in company.indicators">
+                            <indicator-diagram-row v-if="indicator.digit && indicator.diagram" @name-click="toggleDiagram(indicator)"
+                                                   :indicator="indicator" :years="years"></indicator-diagram-row>
+                            <indicator-row :indicator="indicator" :years="years" @name-click="toggleDiagram(indicator)"></indicator-row>
+                        </template>
+                    </tbody>
+                    <tfoot>
+                        <sector-footer-row :sector="sector" :years="years"
+                                       @collapse="toggleSector(sector)"></sector-footer-row>
+                    </tfoot>
+                </template>
             </template>
         </table>
     </section>
@@ -39,17 +44,17 @@ import SectorHeaderRow from './table/SectorHeaderRow.vue'
 import CompanyHeaderRow from './table/CompanyHeaderRow.vue'
 import IndicatorRow from './table/IndicatorRow.vue'
 import SectorFooterRow from './table/SectorFooterRow.vue'
+import IndicatorDiagramRow from './table/IndicatorDiagramRow.vue'
 
 
 export default {
     name: 'companies-page',
     components: {
-        AlertLoader, AlertError, CompaniesHeaderRow, CompanyHeaderRow, SectorHeaderRow, SectorFooterRow, IndicatorRow
+        AlertLoader, AlertError, CompaniesHeaderRow, CompanyHeaderRow, SectorHeaderRow, SectorFooterRow, IndicatorRow,IndicatorDiagramRow
     },
     data () {
         return {
             companies: store.state.companies,
-            expanded:{}
         }
     },
     computed: {
@@ -84,13 +89,13 @@ export default {
         fetchData(){
             store.dispatch(FETCH_COMPANIES);
         },
-        toggleSector: function (id) {
-            this.expanded[id] = ! this.expanded[id];
-            console.log('sector:', id, this.expanded[id] ? 'expanded' : 'collapsed');
+        toggleDiagram: function (indicator) {
+            this.$set(indicator,'diagram',!indicator.diagram);
+            console.log('diagram:', indicator.id, 'expanded',indicator.diagram);
         },
-        collapseSector: function (id) {
-            this.expanded[id] = false;
-            console.log('sector:', id, 'collapsed');
+        toggleSector: function (sector) {
+            this.$set(sector,'expanded',!sector.expanded);
+            console.log('sector:', sector.id, 'expanded', sector.expanded );
         }
     }
 };

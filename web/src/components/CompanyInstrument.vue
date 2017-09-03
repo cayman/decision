@@ -1,18 +1,23 @@
 <template>
     <span>
-        <span @dblclick="toggleEdit()">{{ type.short }}</span>
+        <strong @dblclick="toggleEdit()">{{ type.short }}</strong>
         <span v-if="model">
             <input  type="text" size="6" v-model.number.trim="model.id" @dblclick="openWindow()"/>
             <input  type="text" size="6" v-model.number.trim="model.code" @dblclick="openWindow()"/>
             <button @click="updateInstrument()">Save</button>
         </span>
         <span v-else>
-            <img :src="icon" height="12px" width="12px" @dblclick="toggleEdit()">
+            <a :href="codeUrl" target="target">
+                <img :src="'icon/' + micex.icon" height="12px" width="12px">
+            </a>
             <a :href="instrumentUrl" target="target">
+                <img :src="'icon/' + rbc.icon" height="12px" width="12px">
+            </a>
+            <a :href="codeUrl" target="target">
                 {{ instrument.code }}
             </a>
         </span>
-
+        &nbsp; &nbsp;
     </span>
 </template>
 
@@ -36,11 +41,11 @@ export default {
         rbc:function(){
             return this.links.find(link=>link.id == 0);
         },
-        icon:function(){
-            return 'icon/'+this.micex.icon;
+        codeUrl:function(){
+            return this.micex.instrumentUrl + this.instrument.code;
         },
         instrumentUrl:function(){
-            return this.micex.instrumentUrl + this.instrument.code;
+            return this.rbc.instrumentUrl + this.instrument.id;
         },
         searchUrl:function(){
             return this.link.searchUrl + this.companyName;
