@@ -17,7 +17,7 @@
                 {{ instrument.code }}
             </a>
         </span>
-        &nbsp; &nbsp;
+        <span>&nbsp; &nbsp;</span>
     </span>
 </template>
 
@@ -31,7 +31,7 @@ export default {
     data () {
         return {
             model:null,
-            links: store.state.links.list,
+            links: store.state.links.list
         }
     },
     computed:{
@@ -48,7 +48,7 @@ export default {
             return this.rbc.instrumentUrl + this.instrument.id;
         },
         searchUrl:function(){
-            return this.link.searchUrl + this.companyName;
+            return this.rbc.searchUrl + this.companyName;
         }
     },
     methods: {
@@ -62,7 +62,7 @@ export default {
         updateInstrument:function () {
             store.dispatch(UPDATE_COMPANY_INSTRUMENT, this.model);
             this.model = null;
-        },
+        }
 
     }
 }
