@@ -1,6 +1,6 @@
 <template>
     <tr class="indicator_diagram">
-        <td class="indicator_name" nowrap>
+        <td class="indicator_name"  colspan="2">
             <a @click="nameClick">
                 {{ indicator.name }}
             </a>
@@ -11,12 +11,14 @@
             <div>bottom:{{ bottom }}</div>
             <div>point:{{ point }}</div>
         </td>
+        <indicator-svg  :top="top" :max="maxValue" min="minValue":bottom="bottom" :point="point"></indicator-svg>
         <indicator-svg-cell  v-for="year in years" :key="year" :value="indicator.years[year]" :top="top/point" :bottom="bottom/point" :point="point"></indicator-svg-cell>
     </tr>
 </template>
 
 <script>
 import IndicatorSvgCell from './IndicatorSvgCell.vue'
+import IndicatorSvg from './IndicatorSvg.vue'
 export default {
     name:'indicator-diagram-row',
     props: ['indicator','years'],
@@ -30,7 +32,7 @@ export default {
         }
     },
     components: {
-        IndicatorSvgCell
+        IndicatorSvgCell, IndicatorSvg
     },
     computed: {
         top(){

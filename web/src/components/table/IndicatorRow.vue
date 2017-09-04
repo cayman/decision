@@ -1,6 +1,6 @@
 <template>
     <tr class="company_indicator">
-        <td class="indicator_name" nowrap>
+        <td class="indicator_name" colspan="3" nowrap>
             <a @click="nameClick()" :class="{ selected:indicator.diagram }">{{ indicator.id }} - {{ indicator.name }}</a>
             <span class="unit">({{ unit }})</span>
             <span class="weight positive" v-if="indicator.weight>0">{{ indicator.weight }}</span>

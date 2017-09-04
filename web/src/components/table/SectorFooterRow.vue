@@ -1,6 +1,6 @@
 <template>
     <tr class="sector_footer">
-        <td :colspan="years.length+1" @click="collapseSector">
+        <td :colspan="years.length+3" @click="collapseSector">
             <div class="links">{{ sector.name }}</div>
         </td>
     </tr>

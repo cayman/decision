@@ -1,6 +1,6 @@
 <template>
     <tr class="company_header">
-        <td class="caption" :colspan="years.length+1">
+        <td class="caption" :colspan="years.length+3">
             <span>{{ company.id }}</span>
             <router-link :to="{ name: 'company', params: { companyId: company.id }}">{{ company.name }}</router-link>
             <span v-if="company.weight>0" class="weight positive">{{ company.weight }}</span>
