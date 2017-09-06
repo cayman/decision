@@ -11,8 +11,9 @@ const restPort = process.env.REST_PORT || '5000';
 module.exports = {
     context: path.resolve(process.cwd(), 'src'),
     entry:{
-        vue: ['vue', 'vue-router','vue-notification'],
+        vue: ['vue', 'vue-router','vue-notification','vuex'],
         rx: [ 'rxjs'],
+        polyfill: [ 'babel-polyfill'],
         main: './main.js',
     },
     output: {
@@ -63,7 +64,7 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
-            name: ['rx','vue'],
+            name: ['rx','vue','polyfill'],
             filename:'[name].bundle.js'
         }),
         new ExtractTextPlugin('style.bundle.css'),

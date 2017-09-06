@@ -25,16 +25,13 @@
 </template>
 
 <script>
-import { FETCH_LINKS, FETCH_INSTRUMENT_TYPES } from './core/actions';
-import store from './core/store';
+import { FETCH_LINKS,FETCH_INSTRUMENT_TYPES} from '../actions';
 
 export default {
   name: 'app',
   data () {
     return {
-      links: store.state.links,
-      sectors: store.state.sectors,
-      companies: store.state.companies,
+      messages: this.$store.state.messages,
     }
   },
 
@@ -45,13 +42,13 @@ export default {
   watch: {
     // в случае изменения маршрута запрашиваем данные вновь
     '$route': 'fetchData',
-    'links.error':function(error) {
+    'messages.links.error':function(error) {
       if(error) this.notifyError('Справочника ссылок',error)
     },
-    'sectors.error':function(error) {
+    'messages.sectors.error':function(error) {
       if(error) this.notifyError('Справочника секторов',error)
     },
-    'companies.error':function(error) {
+    'messages.companies.error':function(error) {
         if(error) this.notifyError('Компаний',error)
     }
   },
@@ -67,8 +64,8 @@ export default {
       });
     },
     fetchData(){
-      store.dispatch(FETCH_LINKS);
-      store.dispatch(FETCH_INSTRUMENT_TYPES);
+      this.$store.dispatch(FETCH_LINKS);
+      this.$store.dispatch(FETCH_INSTRUMENT_TYPES);
     },
   }
 }
@@ -76,13 +73,12 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 
-   @import "assets/style.scss";
+   @import "../assets/style.scss";
 
   .container {
     display: flex;
     flex-direction: column;
   }
-
 
 
   header {

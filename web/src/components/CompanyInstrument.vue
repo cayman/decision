@@ -1,19 +1,21 @@
 <template>
     <span>
-        <strong @dblclick="toggleEdit()">{{ type.short }}</strong>
+        <strong @dblclick="toggleEditModel()">{{ type.short }}</strong>
         <span v-if="model">
-            <input  type="text" size="6" v-model.number.trim="model.id" @dblclick="openWindow()"/>
-            <input  type="text" size="6" v-model.number.trim="model.code" @dblclick="openWindow()"/>
+            <input type="text" size="6" v-model.number.trim="model.id"
+                   @dblclick="openSearchLink(model.id)"/>
+            <input type="text" size="6" v-model.number.trim="model.code"
+                   @dblclick="openSearchLink(model.code)"/>
             <button @click="updateInstrument()">Save</button>
         </span>
         <span v-else>
-            <a :href="codeUrl" target="target">
-                <img :src="'icon/' + micex.icon" height="12px" width="12px">
+            <a :href="stockUrl" :target="target">
+                <img :src="stockLink.icon | icon" height="12px" width="12px">
             </a>
-            <a :href="instrumentUrl" target="target">
-                <img :src="'icon/' + rbc.icon" height="12px" width="12px">
+            <a :href="infoUrl" :target="target">
+                <img :src="infoLink.icon | icon" height="12px" width="12px">
             </a>
-            <a :href="codeUrl" target="target">
+            <a :href="stockUrl" :target="target">
                 {{ instrument.code }}
             </a>
         </span>
@@ -22,8 +24,9 @@
 </template>
 
 <script>
-import {UPDATE_COMPANY_INSTRUMENT} from '../core/actions';
-import store from '../core/store';
+import { mapGetters } from 'vuex';
+import { UPDATE_COMPANY_INSTRUMENT } from '../actions';
+import { composeUrl, composeIconUrl } from '../actions/utils';
 
 export default {
     name: 'company-instrument',
@@ -31,39 +34,29 @@ export default {
     data () {
         return {
             model:null,
-            links: store.state.links.list
         }
     },
     computed:{
-        micex:function(){
-            return this.links.find(link=>link.id == 5);
+        ...mapGetters(['dictLinks', 'infoLink', 'stockLink']),
+        stockUrl(){
+            return composeUrl(this.stockLink.instrumentUrl,this.instrument.code);
         },
-        rbc:function(){
-            return this.links.find(link=>link.id == 0);
-        },
-        codeUrl:function(){
-            return this.micex.instrumentUrl + this.instrument.code;
-        },
-        instrumentUrl:function(){
-            return this.rbc.instrumentUrl + this.instrument.id;
-        },
-        searchUrl:function(){
-            return this.rbc.searchUrl + this.companyName;
+        infoUrl(){
+            return composeUrl(this.infoLink.instrumentUrl,this.instrument.id);
         }
     },
     methods: {
-        toggleEdit: function () {
+        openSearchLink(input) {
+            const url = composeUrl(this.infoLink.searchUrl, input || this.company.name);
+            window.open(url, '_search');
+        },
+        toggleEditModel() {
             this.model = this.model ? null : Object.assign({},this.instrument);
         },
-        openWindow: function () {
-            console.log('openWindow:', this.searchUrl);
-            window.open(this.searchUrl, '_search');
-        },
-        updateInstrument:function () {
-            store.dispatch(UPDATE_COMPANY_INSTRUMENT, this.model);
+        updateInstrument() {
+            this.$store.dispatch(UPDATE_COMPANY_INSTRUMENT, this.model);
             this.model = null;
         }
-
     }
 }
 </script>

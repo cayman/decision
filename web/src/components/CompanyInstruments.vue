@@ -3,29 +3,30 @@
         <!--add new link form-->
         <span v-if="model">
             <select v-model="selectedType">
-                <option v-for="type0 in allowedTypes" :value="type0">{{ type0.name }}</option>
+                <option v-for="type0 in remainingTypes" :value="type0">{{ type0.name }}</option>
             </select>
             <span>Id</span>
             <input type="text" size="6" v-model.number.trim="model.id"
-                   @dblclick="openWindow(selectedType ? rbc.searchUrl : null)"/>
+                   @dblclick="openSearchLink(model.id)"/>
             <span>Code</span>
             <input type="text" size="6" v-model.trim="model.code"
-                   @dblclick="openWindow(selectedType ? micex.searchUrl : null)"/>
+                   @dblclick="openSearchLink(model.code)"/>
             <button @click="createInstrument()">Save</button>
         </span>
 
         <company-instrument v-for="instrument in company.instruments"
-                      :key="instrument.typeId" :type="getType(instrument.typeId)" :instrument="instrument"
-                      :company-name="company.name"target="_detail"></company-instrument>
+                      :key="instrument.typeId" :type="getInstrumentType(instrument.typeId)" :instrument="instrument"
+                      :company-name="company.name" target="_detail"></company-instrument>
         <!--add new instrument button-->
-        <span @click="toggleAppend()">+I</span>
+        <span @click="toggleAppendMode()">+I</span>
     </span>
 </template>
 
 <script>
-import {CREATE_COMPANY_INSTRUMENT} from '../core/actions';
-import store from '../core/store';
+import { mapGetters } from 'vuex';
+import { CREATE_COMPANY_INSTRUMENT } from '../actions';
 import CompanyInstrument from './CompanyInstrument.vue'
+
 
 export default {
     name: 'company-instruments',
@@ -35,46 +36,34 @@ export default {
     },
     data () {
         return {
-            urls: store.state.urls,
-            types: store.state.instrumentsTypes.list,
-            links: store.state.links.list,
             model: null,
             selectedType: null,
         }
     },
     computed: {
-        micex:function(){
-            return this.links.find(link=>link.id == 5);
-        },
-        rbc:function(){
-            return this.links.find(link=>link.id == 0);
-        },
-        allowedTypes: function () {
-            const types =  this.types.filter(type =>
-              !this.company.instruments.find(instrument => instrument.typeId === type.id));
+        ...mapGetters(['getInstrumentType','getInstrumentTypesResidual', 'infoLink']),
+
+        remainingTypes: function () {
+            const types =  this.getInstrumentTypesResidual(this.company.instruments);
             this.selectedType = types.length>0 ? types[0] : null;
             return types;
-        },
+        }
     },
-
+    mounted() {
+      //  console.log(this.foo('hello')); // logs "hello"
+    },
     methods: {
-
-        getType(id){
-            return this.types.find(type=>type.id == id)
+        openSearchLink(input) {
+            const url = composeUrl(this.infoLink.searchUrl, input || this.company.name);
+            window.open(url, '_search');
         },
-
-        toggleAppend: function () {
+        toggleAppendMode() {
             this.model = this.model ? null : {companyId: this.company.id, typeId: null, id: null, code:null};
-
         },
-        openWindow: function (url=this.urls.search) {
-            console.log('openWindow:', url + this.company.name);
-            window.open(url + this.company.name, '_search');
-        },
-        createInstrument: function () {
+        createInstrument() {
             if (this.model && this.selectedType && this.model.id && this.model.code) {
                 this.model.typeId = this.selectedType.id;
-                store.dispatch(CREATE_COMPANY_INSTRUMENT, this.model);
+                this.$store.dispatch(CREATE_COMPANY_INSTRUMENT, this.model);
                 this.model = null;
             }
         },

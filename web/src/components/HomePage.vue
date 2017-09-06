@@ -7,8 +7,7 @@
 </template>
 
 <script>
-import { FETCH_SECTORS } from '../core/actions';
-import store from '../core/store';
+import { FETCH_SECTORS } from '../actions';
 
 export default {
     name: 'home-page',
@@ -29,7 +28,7 @@ export default {
     },
     methods: {
         fetchData(){
-            store.dispatch(FETCH_SECTORS);
+            this.$store.dispatch(FETCH_SECTORS);
         },
     }
 };

@@ -13,20 +13,20 @@
             </thead>
             <template v-for="(sector,key) in sectors">
                 <thead>
-                    <sector-header-row :sector="sector" :years="years" @name-click="toggleSector(sector)"></sector-header-row>
+                    <sector-header-row :sector="sector" :years="years" @name-click="toggle(sector)"></sector-header-row>
                 </thead>
                 <template v-if="sector.expanded">
                     <tbody v-for="company in sector.companies">
                         <company-header-row :company="company" :years="years"></company-header-row>
                         <template v-for="indicator in company.indicators">
-                            <indicator-diagram-row v-if="indicator.digit && indicator.diagram" @name-click="toggleDiagram(indicator)"
+                            <indicator-diagram-row v-if="indicator.digit && indicator.expanded" @name-click="toggle(indicator)"
                                                    :indicator="indicator" :years="years"></indicator-diagram-row>
-                            <indicator-row :indicator="indicator" :years="years" @name-click="toggleDiagram(indicator)"></indicator-row>
+                            <indicator-row :indicator="indicator" :selected="indicator.expanded" :years="years" @name-click="toggle(indicator)"></indicator-row>
                         </template>
                     </tbody>
                     <tfoot>
                         <sector-footer-row :sector="sector" :years="years"
-                                       @collapse="toggleSector(sector)"></sector-footer-row>
+                                       @collapse="toggle(sector)"></sector-footer-row>
                     </tfoot>
                 </template>
             </template>
@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import { FETCH_COMPANIES } from '../core/actions';
-import store from '../core/store';
+import { mapGetters, mapMutations, mapActions} from 'vuex';
+import { FETCH_COMPANIES } from '../actions';
 import AlertLoader from './AlertLoader.vue'
 import AlertError from './AlertError.vue'
 import CompaniesHeaderRow from './table/CompaniesHeaderRow.vue'
@@ -52,32 +52,19 @@ export default {
     components: {
         AlertLoader, AlertError, CompaniesHeaderRow, CompanyHeaderRow, SectorHeaderRow, SectorFooterRow, IndicatorRow,IndicatorDiagramRow
     },
-    data () {
-        return {
-            companies: store.state.companies,
-        }
-    },
     computed: {
-        years(){
-            return this.companies.years;
-        },
-        sectors(){
-            return this.companies.sectors;
-        },
+        ...mapGetters(['sectors','companies','years']),
         loading(){
-            return this.companies.loading;
+            return this.$store.state.loading.companies;
         },
-        error(){
-            return this.companies.error;
-        }
     },
     created () {
         // запрашиваем данные когда реактивное представление уже создано
-        this.fetchData()
+        this[FETCH_COMPANIES]();
     },
     watch: {
         // в случае изменения маршрута запрашиваем данные вновь
-        '$route': 'fetchData'
+        '$route': FETCH_COMPANIES
     },
     beforeRouteUpdate (to, from, next) {
          console.log('Company page');
@@ -86,17 +73,9 @@ export default {
          next();
     },
     methods: {
-        fetchData(){
-            store.dispatch(FETCH_COMPANIES);
-        },
-        toggleDiagram: function (indicator) {
-            this.$set(indicator,'diagram',!indicator.diagram);
-            console.log('diagram:', indicator.id, 'expanded',indicator.diagram);
-        },
-        toggleSector: function (sector) {
-            this.$set(sector,'expanded',!sector.expanded);
-            console.log('sector:', sector.id, 'expanded', sector.expanded );
-        }
+        ...mapActions([FETCH_COMPANIES]),
+        ...mapMutations(['toggle']),
+
     }
 };
 </script>

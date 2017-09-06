@@ -3,26 +3,27 @@
         <!--add new link form-->
         <span v-if="model">
             <select v-model="selectedLink">
-                <option v-for="link0 in allowedLinks" :value="link0">{{ link0.name }}</option>
+                <option v-for="link0 in remainingLinks" :value="link0">{{ link0.name }}</option>
             </select>
             <input type="text" size="6" v-model.number.trim="model.id"
                    @keyup.enter="createLink()"
-                   @dblclick="openWindow(selectedLink ? selectedLink.searchUrl : null)"/>
+                   @dblclick="openSearchLink(model.id)"/>
             <button @click="createLink()">Save</button>
         </span>
         <!--show exist link-->
         <company-link v-for="companyLink in company.links"
-                      :key="companyLink.linkId" :link="getLink(companyLink.linkId)" :company-link="companyLink"
-                      :company-name="company.name"target="_detail"></company-link>
+                      :key="companyLink.linkId" :company-link="companyLink"
+                      :company-name="company.name" target="_detail"></company-link>
         <!--add new link button-->
-        <span @click="toggleAppend()">+L</span>
+        <span @click="toggleAppendMode()">+L</span>
     </span>
 </template>
 
 <script>
-import {CREATE_COMPANY_LINK} from '../core/actions';
-import store from '../core/store';
-import CompanyLink from './CompanyLink.vue'
+import { mapGetters } from 'vuex';
+import { CREATE_COMPANY_LINK } from '../actions';
+import { composeUrl } from '../actions/utils';
+import CompanyLink from './CompanyLink.vue';
 
 export default {
     name: 'company-links',
@@ -32,39 +33,34 @@ export default {
     },
     data () {
         return {
-            urls: store.state.urls,
-            links: store.state.links.list,
             model: null,
             selectedLink: null,
         }
     },
     computed: {
-        allowedLinks: function () {
-            const links = this.links.filter(link =>
-              !this.company.links.find(companyLink => companyLink.linkId === link.id));
+        ...mapGetters(['urls','getLinksResidual']),
+        remainingLinks: function () {
+            const links = this.getLinksResidual(this.company.links);
             this.selectedLink = links.length>0 ? links[0] : null;
             return links;
-        },
+        }
     },
-
+    mounted() {
+       // console.log(this.foo('hello')); // logs "hello"
+    },
     methods: {
-
-        getLink(id){
-            return this.links.find(link=>link.id == id)
-        },
-
-        toggleAppend: function () {
+        toggleAppendMode() {
             this.model = this.model ? null : {companyId: this.company.id, linkId: null, id: null};
-
         },
-        openWindow: function (url=this.urls.search) {
-            console.log('openWindow:', url + this.company.name);
-            window.open(url + this.company.name, '_search');
+        openSearchLink(input) {
+            const url = composeUrl(this.selectedLink ? this.selectedLink.searchUrl : this.urls.search,
+                    input || this.company.name);
+            window.open(url, '_search');
         },
-        createLink: function () {
+        createLink() {
             if (this.model && this.selectedLink && this.model.id) {
                 this.model.linkId = this.selectedLink.id;
-                store.dispatch(CREATE_COMPANY_LINK, this.model);
+                this.$store.dispatch(CREATE_COMPANY_LINK, this.model);
                 this.model = null;
             }
         },

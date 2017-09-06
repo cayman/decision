@@ -11,9 +11,9 @@
             </thead>
             <tbody>
                 <template v-for="indicator in company.indicators">
-                    <indicator-diagram-row v-if="indicator.digit && indicator.diagram" @name-click="toggleDiagram(indicator)"
+                    <indicator-diagram-row v-if="indicator.digit && indicator.expanded" @name-click="toggleDiagram(indicator)"
                                            :indicator="indicator" :years="company.years"></indicator-diagram-row>
-                    <indicator-row :indicator="indicator" :years="company.years" @name-click="toggleDiagram(indicator)"></indicator-row>
+                    <indicator-row :indicator="indicator" :selected="indicator.expanded" :years="company.years" @name-click="toggleDiagram(indicator)"></indicator-row>
                 </template>
             </tbody>
         </table>
@@ -22,8 +22,8 @@
 
 
 <script>
-import { FETCH_COMPANY } from '../core/actions';
-import store from '../core/store';
+import { mapGetters, mapActions} from 'vuex';
+import { FETCH_COMPANY } from '../actions';
 import AlertLoader from './AlertLoader.vue'
 import AlertError from './AlertError.vue'
 import CompaniesHeaderRow from './table/CompaniesHeaderRow.vue'
@@ -35,21 +35,10 @@ export default {
     components: {
         AlertLoader, AlertError, CompaniesHeaderRow, IndicatorRow, IndicatorDiagramRow
     },
-    data () {
-        return {
-            companies:store.state.companies,
-            links:store.state.links,
-        }
-    },
     computed: {
-        company(){
-            return this.companies.model;
-        },
+        ...mapGetters(['company']),
         loading(){
-            return this.companies.loading;
-        },
-        error(){
-            return this.companies.error;
+            return this.$store.state.loading.companies;
         },
     },
     beforeRouteUpdate (to, from, next) {
@@ -60,20 +49,16 @@ export default {
     },
     created () {
         // запрашиваем данные когда реактивное представление уже создано
-        this.fetchData()
+        this[FETCH_COMPANY](this.$route.params.companyId);
     },
     watch: {
         // в случае изменения маршрута запрашиваем данные вновь
-        '$route': 'fetchData'
+        '$route'(to) {
+            this[FETCH_COMPANY](to.params.companyId);
+        }
     },
     methods: {
-        fetchData(){
-            store.dispatch(FETCH_COMPANY,this.$route.params.companyId);
-        },
-        toggleDiagram: function (indicator) {
-            this.$set(indicator,'diagram',!indicator.diagram);
-            console.log('diagram:', indicator.id, 'expanded',indicator.diagram);
-        }
+        ...mapActions([FETCH_COMPANY]),
     }
 };
 </script>

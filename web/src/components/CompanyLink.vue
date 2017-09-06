@@ -1,52 +1,51 @@
 <template>
     <span>
-        <img :src="icon" height="12px" width="12px" @dblclick="toggleEdit()">
+        <img :src="link.icon | icon" height="12px" width="12px" @dblclick="toggleEditMode()">
         <span v-if="model">
             <input  type="text" size="6" v-model.number.trim="model.id"
-                    @keyup.enter="updateLink()" @dblclick="openWindow()"/>
-            <button @click="updateLink()">Save</button>
+                    @keyup.enter="updateCompanyLink()" @dblclick="openSearchLink(model.id)"/>
+            <button @click="updateCompanyLink()">Save</button>
         </span>
-        <a v-else :href="companyUrl" target="target">
+        <a v-else :href="companyUrl" :target="target">
             {{ link.name }}
         </a>
     </span>
 </template>
 
 <script>
-import {UPDATE_COMPANY_LINK} from '../core/actions';
-import store from '../core/store';
+import { mapGetters } from 'vuex';
+import { UPDATE_COMPANY_LINK } from '../actions';
+import {  composeUrl } from '../actions/utils';
 
 export default {
     name: 'company-link',
-    props: ['link', 'companyLink', 'companyName', 'target'],
+    props: ['companyLink', 'companyName', 'target'],
     data () {
         return {
-            model:null,
-    }
+            model:null
+        }
     },
     computed:{
-        icon:function(){
-            return 'icon/'+this.link.icon;
+        ...mapGetters(['urls','getLink']),
+        link(){
+            return this.getLink(this.companyLink.linkId);
         },
-        companyUrl:function(){
-            return this.link.companyUrl + this.companyLink.id;
-        },
-        searchUrl:function(){
-            return this.link.searchUrl + this.companyName;
+        companyUrl(){
+            return composeUrl(this.link.companyUrl,this.companyLink.id);
         }
     },
     methods: {
-        toggleEdit: function () {
-            this.model = this.model ? null : Object.assign({},this.companyLink);
+        openSearchLink(input) {
+            const url = composeUrl(this.link.searchUrl, input || this.companyName);
+            window.open(url, '_search');
         },
-        openWindow: function () {
-            console.log('openWindow:', this.searchUrl);
-            window.open(this.searchUrl, '_search');
+        toggleEditMode: function () {
+            this.model = this.model ? null : { ...this.companyLink};
         },
-        updateLink:function () {
-            store.dispatch(UPDATE_COMPANY_LINK, this.model);
+        updateCompanyLink:function () {
+            this.$store.dispatch(UPDATE_COMPANY_LINK, this.model);
             this.model = null;
-        },
+        }
 
     }
 }

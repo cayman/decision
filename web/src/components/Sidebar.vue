@@ -2,7 +2,7 @@
     <aside class="sidebar">
         <ul>
             <li><router-link :to="{ name:'companies'}">Компании</router-link></li>
-            <template v-for="sector in sectors.list">
+            <template v-for="sector in allSectors">
                 <li><router-link :to="{ name: 'companies', query: { sector: sector.id }}">{{ sector.name }}</router-link></li>
             </template>
         </ul>
@@ -10,18 +10,13 @@
 </template>
 
 <script>
-import { FETCH_SECTORS } from '../core/actions';
-import store from '../core/store';
+import { mapGetters, mapActions } from 'vuex';
+import { FETCH_SECTORS } from '../actions';
 
 export default {
     name: 'sidebar',
-    data () {
-        return {
-            sectors: store.state.sectors,
-        }
-    },
-    created () {
-        // запрашиваем данные когда реактивное представление уже создано
+    computed:{
+        ...mapGetters(['allSectors'])
     },
     watch: {
         // в случае изменения маршрута запрашиваем данные вновь
@@ -32,12 +27,10 @@ export default {
      },
     created () {
         // запрашиваем данные когда реактивное представление уже создано
-        this.fetchData()
+        this.fetchSectors()
     },
     methods: {
-        fetchData(){
-            store.dispatch(FETCH_SECTORS);
-        },
+        ...mapActions([FETCH_SECTORS])
     }
 };
 </script>
