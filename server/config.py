@@ -5,10 +5,10 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-host = os.environ.get('FDB_HOST', 'mysql1.justhost.ru')
-database = os.environ.get('FDB_DATABASE', 'u2262s8598_fa')
-user = os.environ.get('FDB_USER', 'u2262s8598_fa')
-password = os.environ.get('FDB_PASSWORD', 'Bs2ROP9dp')
+host = os.environ.get('FDB_HOST', 'localhost')
+database = os.environ.get('FDB_DATABASE', 'fdb_database')
+user = os.environ.get('FDB_USER', 'fdb_user')
+password = os.environ.get('FDB_PASSWORD', 'fdb_password')
 
 class Config(object):
     DEBUG = False

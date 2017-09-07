@@ -16,10 +16,10 @@ https://pypi.python.org/pypi/Flask-Assets
 
 
 sudo gedit /etc/environment
-FDB_HOST = mysql1.justhost.ru
-FDB_DATABASE = u2262s8598_fa
-FDB_USER = u2262s8598_fa
-FDB_PASSWORD = Bs2ROP9dp
+export FDB_HOST=localhost
+export FDB_DATABASE=database
+export FDB_USER=user
+export FDB_PASSWORD=password
 
 CP=>Управление СУБД MySQL
 add host xx.xxx.175.18
