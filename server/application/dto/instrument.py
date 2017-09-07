@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
 from application.models.instrument import Instrument, InstrumentLink, InstrumentType
 
 class InstrumentLinkDTO:

@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
 
 from  application.dto.company import CompanyDTO, CompanyLinkDTO
 from  application.dto.instrument import InstrumentDTO, InstrumentLinkDTO, InstrumentTypeDTO
