@@ -16,7 +16,7 @@ export default {
             .do(instrument => console.log(types.CREATE_COMPANY_INSTRUMENT, instrument))
             .do(instrument => getters.getInstrumentType('instruments',instrument.typeId)
                 || Observable.throw(new Error(`Тип инструмента ${instrument.typeId} не найдена в справочнике`)))
-            .switchMap(instrument=> Observer.of(instrument.companyId)
+            .switchMap(instrument=> Observable.of(instrument.companyId)
                 .map(companyId => getters.getCompany(companyId)
                     || Observable.throw(new Error(`Компания ${companyId} не найдена в справочнике`)))
                 .map(company => commit(mt.SET_COMPANY_INSTRUMENT, {company, instrument}))
@@ -31,7 +31,7 @@ export default {
             .do(instrument => console.log(types.UPDATE_COMPANY_INSTRUMENT, instrument))
             .do(instrument => getters.getInstrumentType('instruments',instrument.typeId) ||
                 Observable.throw(new Error(`Тип инструмента ${instrument.typeId} не найдена в справочнике`)))
-            .switchMap(instrument=> Observer.of(instrument.companyId)
+            .switchMap(instrument=> Observable.of(instrument.companyId)
                 .map(companyId => getters.getCompany(companyId)
                 || Observable.throw(new Error(`Компания ${companyId} не найдена в справочнике`)))
                 .map(company => commit(mt.SET_COMPANY_INSTRUMENT, {company, instrument}))

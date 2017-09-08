@@ -10,6 +10,7 @@ export default {
         instrumentTypes:[],
     },
     companies:{
+        model:null,
         map:{},
         sectors:{},
         years:[],

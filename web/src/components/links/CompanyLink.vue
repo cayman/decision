@@ -6,16 +6,15 @@
                     @keyup.enter="updateCompanyLink()" @dblclick="openSearchLink(model.id)"/>
             <button @click="updateCompanyLink()">Save</button>
         </span>
-        <a v-else :href="companyUrl" :target="target">
+        <a v-else :href="link.companyUrl | url(companyLink.id)" :target="target">
             {{ link.name }}
         </a>
     </span>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { UPDATE_COMPANY_LINK } from '../actions';
-import {  composeUrl } from '../actions/utils';
+import { UPDATE_COMPANY_LINK } from 'actions';
+import {  composeUrl } from 'actions/utils';
 
 export default {
     name: 'company-link',
@@ -26,12 +25,8 @@ export default {
         }
     },
     computed:{
-        ...mapGetters(['urls','getLink']),
         link(){
-            return this.getLink(this.companyLink.linkId);
-        },
-        companyUrl(){
-            return composeUrl(this.link.companyUrl,this.companyLink.id);
+            return this.$store.getters.getLink(this.companyLink.linkId);
         }
     },
     methods: {

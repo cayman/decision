@@ -6,16 +6,40 @@ import Notifications from 'vue-notification'
 import App from './components/App.vue'
 import router from './router'
 import store from './store'
-import {composeIconUrl} from './actions/utils'
+import {composeIconUrl,composeUrl} from './actions/utils'
 
 Vue.config.productionTip = false;
 Vue.use(Notifications);
 
+Vue.filter('url', (baseUrl, params) => {
+    const url = composeUrl(baseUrl, params);
+    // console.info(url, params);
+    return url;
+});
+
 Vue.filter('icon', (value, data) => {
-    const iconUrl = 'icon/'+ value;
-    console.info(value, iconUrl);
+    const iconUrl = composeIconUrl(value);
+    // console.info(value, iconUrl);
     return iconUrl;
 });
+
+
+
+import AlertLoader from './components/AlertLoader.vue';
+import AlertError from './components/AlertError.vue';
+
+import CompaniesHeaderRow from './components/table/CompaniesHeaderRow.vue';
+import CompanyHeaderRow from './components/table/CompanyHeaderRow.vue';
+
+import IndicatorRow from './components/indicators/IndicatorRow.vue';
+import IndicatorDiagramRow from './components/indicators/IndicatorDiagramRow.vue';
+
+Vue.component(AlertLoader.name, AlertLoader);
+Vue.component(AlertError.name, AlertError);
+Vue.component(CompaniesHeaderRow.name, CompaniesHeaderRow);
+Vue.component(CompanyHeaderRow.name, CompanyHeaderRow);
+Vue.component(IndicatorRow.name, IndicatorRow);
+Vue.component(IndicatorDiagramRow.name, IndicatorDiagramRow);
 
 
 /* eslint-disable no-new */

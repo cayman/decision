@@ -9,13 +9,13 @@
             <button @click="updateInstrument()">Save</button>
         </span>
         <span v-else>
-            <a :href="stockUrl" :target="target">
+            <a :href="stockLink.instrumentUrl | url(instrument.code)" :target="target">
                 <img :src="stockLink.icon | icon" height="12px" width="12px">
             </a>
-            <a :href="infoUrl" :target="target">
+            <a :href="infoLink.instrumentUrl | url(instrument.id)" :target="target">
                 <img :src="infoLink.icon | icon" height="12px" width="12px">
             </a>
-            <a :href="stockUrl" :target="target">
+            <a :href="stockLink.instrumentUrl | url(instrument.code)" :target="target">
                 {{ instrument.code }}
             </a>
         </span>
@@ -24,25 +24,26 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { UPDATE_COMPANY_INSTRUMENT } from '../actions';
-import { composeUrl, composeIconUrl } from '../actions/utils';
+import { UPDATE_COMPANY_INSTRUMENT } from 'actions/types';
+import { composeUrl } from 'actions/utils';
 
 export default {
     name: 'company-instrument',
-    props: ['type', 'instrument', 'companyName', 'target'],
+    props: ['instrument', 'companyName', 'target'],
     data () {
         return {
             model:null,
         }
     },
     computed:{
-        ...mapGetters(['dictLinks', 'infoLink', 'stockLink']),
-        stockUrl(){
-            return composeUrl(this.stockLink.instrumentUrl,this.instrument.code);
+        type(){
+            return this.$store.getters.getInstrumentType(this.instrument.typeId)
         },
-        infoUrl(){
-            return composeUrl(this.infoLink.instrumentUrl,this.instrument.id);
+        infoLink(){
+            return this.$store.getters.infoLink;
+        },
+        stockLink(){
+            return this.$store.getters.stockLink;
         }
     },
     methods: {

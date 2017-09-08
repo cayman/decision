@@ -20,9 +20,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { CREATE_COMPANY_LINK } from '../actions';
-import { composeUrl } from '../actions/utils';
+import { CREATE_COMPANY_LINK } from 'actions';
+import { composeUrl } from 'actions/utils';
 import CompanyLink from './CompanyLink.vue';
 
 export default {
@@ -34,13 +33,19 @@ export default {
     data () {
         return {
             model: null,
-            selectedLink: null,
+            selectedLink: null
         }
     },
     computed: {
-        ...mapGetters(['urls','getLinksResidual']),
-        remainingLinks: function () {
-            const links = this.getLinksResidual(this.company.links);
+        urls() {
+            return this.$store.state.urls;
+        },
+        links() {
+            return this.$store.state.dictionary.links;
+        },
+        remainingLinks() {
+            const links = this.links.filter(_link=>
+                !this.company.links.some(compLink => compLink.linkId === _link.id));
             this.selectedLink = links.length>0 ? links[0] : null;
             return links;
         }
@@ -63,7 +68,7 @@ export default {
                 this.$store.dispatch(CREATE_COMPANY_LINK, this.model);
                 this.model = null;
             }
-        },
+        }
     }
 }
 </script>

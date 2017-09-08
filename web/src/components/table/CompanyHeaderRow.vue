@@ -1,8 +1,10 @@
 <template>
     <tr class="company_header">
-        <td class="caption" :colspan="years.length+3">
-            <span>{{ company.id }}</span>
-            <router-link :to="{ name: 'company', params: { companyId: company.id }}">{{ company.name }}</router-link>
+        <td class="caption_num">
+            <router-link :to="{ name: 'company', params: { companyId: company.id }}">{{ company.id }}</router-link>
+        </td>
+        <td class="caption" :colspan="years.length+2">
+            <span @click="nameClick()">{{ company.name }}</span>
             <span v-if="company.weight>0" class="weight positive">{{ company.weight }}</span>
             <span v-else-if="company.weight<0" class="weight negative">{{ company.weight }}</span>
 
@@ -17,21 +19,30 @@
 </template>
 
 <script>
-import CompanyLinks from '../CompanyLinks.vue'
-import CompanyInstruments from '../CompanyInstruments.vue'
+import CompanyLinks from '../links/CompanyLinks.vue'
+import CompanyInstruments from '../instruments/CompanyInstruments.vue'
 
 export default {
     name:'company-header-row',
     components: {
         CompanyLinks,CompanyInstruments
     },
-    props: ['company','years']
+    props: ['company','years'],
+    methods: {
+        nameClick: function () {
+            console.log('nameClick',this.company.name);
+            this.$emit('name-click',this.company);
+        }
+    },
 }
 </script>
 
 
 <style rel="stylesheet/scss" lang="scss">
     .company_header {
+        .caption_num{
+            width: 20px;
+        }
         .company_buttons{
             float:right;
             text-align: right;

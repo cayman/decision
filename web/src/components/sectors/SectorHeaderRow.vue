@@ -1,8 +1,7 @@
 <template>
     <tr class="sector_header">
         <th :colspan="years.length+3" >
-            <span>{{ sector.id }}</span>
-            - <span @click="nameClick()">{{ sector.name }} ({{ sector.companies.length }})</span>
+            <span @click="nameClick()">{{ sector.name }} ({{ sector.companies.length }})</span>
         </th>
     </tr>
 </template>

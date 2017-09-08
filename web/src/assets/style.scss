@@ -10,7 +10,7 @@ $empty_background: #faedd0;
 
 body            { font-family: sans-serif; }
 
-a, h1, h2       { color: #377ba8; }
+a, h1, h2       { color: #377ba8; text-decoration: none; font-weight: normal }
 h1, h2          { font-family: 'Georgia', serif; margin: 0; }
 h1              { border-bottom: 2px solid #eee; }
 h2              { font-size: 1.2em; }
@@ -19,6 +19,8 @@ table {
   max-width: 1200px;
   padding: 0;
   margin: 0;
+
+
 
   caption {
     padding: 0 0 5px 0;

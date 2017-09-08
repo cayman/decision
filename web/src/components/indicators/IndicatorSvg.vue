@@ -9,6 +9,8 @@
               xmlns:ev="http://www.w3.org/2001/xml-events">
             <g>
 
+                <line x1="0" v-for="(item,index) in 10" :y1="index*10" x2="30" :y2="index*10" style="stroke:rgba(173, 170, 170, 0.3);stroke-width:1" />
+
                 <!--rgba(124, 194, 125, 1);rgba(81, 207, 83, 1); rgba(31, 38, 140, 0.9) -->
                 <rect x="3" :y="0" width="1" :height="top/point" fill="rgba(81, 207, 83, 0.6)"  stroke="rgba(81, 207, 83, 0.9)" stroke-width="1"/>
                 <rect x="3" :y="top/point" width="1" :height="-bottom/point" fill="rgba(244,47,39, 0.6)"  stroke="rgba(244,47,39, 0.9)" stroke-width="1"/>

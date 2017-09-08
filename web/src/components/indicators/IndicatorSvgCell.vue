@@ -9,11 +9,16 @@
               xmlns:ev="http://www.w3.org/2001/xml-events">
             <g v-if="value!==undefined">
                 <!--rgba(124, 194, 125, 1);rgba(81, 207, 83, 1); rgba(31, 38, 140, 1);-->
-                <rect v-if="value>=0" x="8" :y="100 + bottom - height" width="15" :height="height" fill="rgba(81, 207, 83, 0.6)"  stroke="rgba(81, 207, 83, 0.9)" stroke-width="1"/>
-                <rect v-if="value===0" x="8" :y="100+bottom-(top>0?1:0)" width="15" height="1" fill="rgba(111, 115, 168, 0.6)"  stroke="rgba(111, 115, 168, 0.9)" stroke-width="2"/>
-                <rect v-if="value<0" x="8" :y="100 + bottom" width="15" :height="height" fill="rgba(244,47,39, 0.6)"  stroke="rgba(244,47,39, 0.9)" stroke-width="1"/>
+
+                <line x1="0" v-for="(item,index) in 10" :y1="index*10" x2="30" :y2="index*10" style="stroke:rgba(173, 170, 170, 0.5);stroke-width:0.5" />
+
+                <rect v-if="value>=0" x="8" :y="100 + bottom - height" width="15" :height="height" fill="rgba(81, 207, 83, 0.7)"  stroke="rgba(81, 207, 83, 0.9)" stroke-width="1"/>
+                <rect v-if="value===0" x="8" :y="100+bottom-(top>0?1:0)" width="15" height="1" fill="rgba(111, 115, 168, 0.7)"  stroke="rgba(111, 115, 168, 0.9)" stroke-width="2"/>
+                <rect v-if="value<0" x="8" :y="100 + bottom" width="15" :height="height" fill="rgba(244,47,39, 0.7)"  stroke="rgba(244,47,39, 0.9)" stroke-width="1"/>
 
                 <rect x="0" :y="100+bottom-(top>0?1:0)" width="30" height="1" fill="rgba(40, 47, 143, 0.6)"  stroke="rgba(40, 47, 143, 0.9)" stroke-width="0"/>
+
+
             </g>
         </svg>
     </td>

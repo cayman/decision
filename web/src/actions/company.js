@@ -38,8 +38,8 @@ export default {
             .do(link => console.log(types.CREATE_COMPANY_LINK, link))
             .do(link => getters.getLink(link.linkId) ||
                 Observable.throw(new Error(`Ссылка ${link.linkId} не найдена в справочнике`)))
-            .switchMap(link=> Observer.of(link.companyId)
-                .map(companyId => getters.getCompany({companyId})
+            .switchMap(link=> Observable.of(link.companyId)
+                .map(companyId => getters.getCompany(companyId)
                 || Observable.throw(new Error(`Компания ${companyId} не найдена`)))
                 .map(company => commit(mt.SET_COMPANY_LINK, {company, link}))
             )
@@ -54,7 +54,7 @@ export default {
             .do(link => console.log(types.UPDATE_COMPANY_LINK, link))
             .do(link => getters.getLink(link.linkId) ||
                 Observable.throw(new Error(`Ссылка ${link.linkId} не найдена в справочнике`)))
-            .switchMap(link=> Observer.of(link.companyId)
+            .switchMap(link=> Observable.of(link.companyId)
                 .map(companyId => getters.getCompany(companyId)
                 || Observable.throw(new Error(`Компания ${companyId} не найдена в справочнике`)))
                 .map(company => commit(mt.SET_COMPANY_LINK, {company, link}))

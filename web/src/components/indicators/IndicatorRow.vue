@@ -1,7 +1,10 @@
 <template>
     <tr class="company_indicator">
-        <td class="indicator_name" colspan="3" nowrap>
-            <a @click="nameClick()" :class="{ selected }">{{ indicator.id }} - {{ indicator.name }}</a>
+        <td class="indicator_num"nowrap>
+            <a @click="nameClick()" :class="{ selected }">{{ indicator.id }}</a>
+        </td>
+        <td class="indicator_name" colspan="2" nowrap>
+            <a @click="nameClick()" :class="{ selected }">{{ indicator.name }}</a>
             <span class="unit">({{ unit }})</span>
             <span class="weight positive" v-if="indicator.weight>0">{{ indicator.weight }}</span>
             <span class="weight negative" v-else-if="indicator.weight<0" >{{ indicator.weight }}</span>

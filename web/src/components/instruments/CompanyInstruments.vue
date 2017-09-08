@@ -15,7 +15,7 @@
         </span>
 
         <company-instrument v-for="instrument in company.instruments"
-                      :key="instrument.typeId" :type="getInstrumentType(instrument.typeId)" :instrument="instrument"
+                      :key="instrument.typeId" :instrument="instrument"
                       :company-name="company.name" target="_detail"></company-instrument>
         <!--add new instrument button-->
         <span @click="toggleAppendMode()">+I</span>
@@ -23,10 +23,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { CREATE_COMPANY_INSTRUMENT } from '../actions';
+import { CREATE_COMPANY_INSTRUMENT } from 'actions/types';
+import { composeUrl } from 'actions/utils';
 import CompanyInstrument from './CompanyInstrument.vue'
-
 
 export default {
     name: 'company-instruments',
@@ -41,10 +40,15 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getInstrumentType','getInstrumentTypesResidual', 'infoLink']),
-
-        remainingTypes: function () {
-            const types =  this.getInstrumentTypesResidual(this.company.instruments);
+        infoLink(){
+            return this.$store.getters.infoLink;
+        },
+        types(){
+            return this.$store.getters.instrumentTypes;
+        },
+        remainingTypes() {
+            const types =  this.types.filter(_type=>
+                    !this.company.instruments.some(instrument => instrument.typeId === _type.id));
             this.selectedType = types.length>0 ? types[0] : null;
             return types;
         }

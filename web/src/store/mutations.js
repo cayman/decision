@@ -64,6 +64,7 @@ export default {
     [mt.LOADED]: (state, {name, error}) => {
         Vue.set(state.messages,name,error);
         Vue.set(state.loading,name,false);
+        error ? console.error(name,error) : null;
     },
     [mt.TOGGLE]: (state, entity) => {
         Vue.set(entity,'expanded',!entity.expanded);
