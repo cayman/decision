@@ -1,4 +1,7 @@
-from flask import jsonify, request, render_template
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
+from flask import jsonify, request
 import locale
 
 from application import app, db
@@ -7,6 +10,7 @@ import application.requests.sector
 import application.requests.company
 import application.requests.instrument
 import application.requests.link
+import application.requests.post
 
 locale.setlocale(locale.LC_ALL, ('RU','UTF8'))
 
@@ -32,22 +36,14 @@ def page_not_found(e):
 
 @app.route('/')
 @app.route('/index')
+@app.route('/api')
 def index():
-    posts = [ # список выдуманных постов
-        {
-            'author': { 'nickname': 'John' },
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': { 'nickname': 'Susan' },
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template("index.html",
-                           title = 'Home',
-                           user = user,
-                           posts = posts)
+    title = {
+                'name': 'resfin',
+                'body': 'resfin api server work!'
+            }
 
+    return jsonify(title)
 
 
 

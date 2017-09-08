@@ -17,7 +17,9 @@ export default {
             .map(list=>list || [])
             .do(list => commit(mt.SET_DICTIONARY, {name, list}))
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Загрузка ссылок',text:error }
+                })
             );
     },
     [types.FETCH_INSTRUMENT_TYPES]: ({commit})=> {
@@ -28,7 +30,9 @@ export default {
             .map(list=>list || [])
             .do(list => commit(mt.SET_DICTIONARY, {name, list}))
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Загрузка типов иструментов',text:error }
+                })
             );
     },
 
@@ -40,7 +44,9 @@ export default {
             .map(list=>list || [])
             .do(list => commit(mt.SET_DICTIONARY, {name, list}))
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Загрузка секторов',text:error }
+                })
             );
     },
 }

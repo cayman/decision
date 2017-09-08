@@ -6,6 +6,7 @@
 import company from './company';
 import dictionary from './dictionary';
 import instrument from './instrument';
+import post from './post';
 
 export * from './types';
-export const actions = Object.assign({}, company,dictionary,instrument);
+export const actions = Object.assign({}, company,dictionary,instrument,post);

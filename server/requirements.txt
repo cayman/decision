@@ -1,0 +1,9 @@
+Flask==0.12
+Flask-Bcrypt==0.7
+Flask-Cors==3.0
+Flask-SQLAlchemy==2.2
+Flask-MySQL==1.4
+PyMySQL==0.7
+PyJWT==1.5
+beautifulsoup4==4.6
+mysql-connector==2.1

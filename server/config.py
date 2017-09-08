@@ -1,11 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-user = os.environ.get('DB_USER', 'user')
-password = os.environ.get('DB_PASSWORD', 'password')
-host = os.environ.get('DB_HOST', 'localhost')
-database = os.environ.get('DB_DATABASE', 'fa')
+host = os.environ.get('FDB_HOST', 'localhost')
+database = os.environ.get('FDB_DATABASE', 'fdb_database')
+user = os.environ.get('FDB_USER', 'fdb_user')
+password = os.environ.get('FDB_PASSWORD', 'fdb_password')
 
 class Config(object):
     DEBUG = False

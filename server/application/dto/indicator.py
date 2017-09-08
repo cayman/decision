@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
 
 def get_floaf(value):
     return float(value.replace(',', '.').replace(' ', ''))

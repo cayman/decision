@@ -8,14 +8,18 @@ export default {
         links:[],
         sectors:[],
         instrumentTypes:[],
+        error: null
     },
     companies:{
+        model:null,
         map:{},
         sectors:{},
         years:[],
-            current:null
     },
+    posts:[],
     messages:{
+        error:null,
+        info:null,
     },
     loading:{
     }

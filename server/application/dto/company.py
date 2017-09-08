@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
 from application.dto.indicator import IndicatorDTO
 from application.dto.instrument import InstrumentDTO
 from application.models.company import CompanyLink
