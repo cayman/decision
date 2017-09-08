@@ -6,6 +6,8 @@
 
 export const SET_DICTIONARY = 'setDictionary';
 export const SET_COMPANY = 'setCompany';
+export const SET_POSTS = 'setPosts';
+export const SET_POST = 'setPost';
 export const SET_COMPANIES = 'setCompanies';
 export const SET_COMPANY_LINK = 'setCompanyLink';
 export const SET_INSTRUMENT_LINK = 'setInstrumentLink';

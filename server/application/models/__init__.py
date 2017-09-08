@@ -6,3 +6,5 @@ from  application.models.instrument import Instrument, InstrumentLink, Instrumen
 from  application.models.indicator import Indicator, Value
 from  application.models.link import Link
 from  application.models.sector import Sector
+from  application.models.post import Post
+from  application.models.user import User

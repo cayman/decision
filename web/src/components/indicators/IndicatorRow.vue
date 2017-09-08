@@ -6,8 +6,8 @@
         <td class="indicator_name" colspan="2" nowrap>
             <a @click="nameClick()" :class="{ selected }">{{ indicator.name }}</a>
             <span class="unit">({{ unit }})</span>
-            <span class="weight positive" v-if="indicator.weight>0">{{ indicator.weight }}</span>
-            <span class="weight negative" v-else-if="indicator.weight<0" >{{ indicator.weight }}</span>
+            <span class="weight positive" v-if="indicator.weight>0">{{ indicator.weight | decision }}</span>
+            <span class="weight negative" v-else-if="indicator.weight<0" >{{ indicator.weight | decision }}</span>
         </td>
         <indicator-value-cell  v-for="year in years" :key="year" :value="indicator.years[year]"
                               :selected="selected" :digit="indicator.digit" :last="year == years[years.length - 1]"></indicator-value-cell>

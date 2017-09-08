@@ -10,6 +10,7 @@ import application.requests.sector
 import application.requests.company
 import application.requests.instrument
 import application.requests.link
+import application.requests.post
 
 locale.setlocale(locale.LC_ALL, ('RU','UTF8'))
 

@@ -17,8 +17,14 @@ export default {
             .map(list => list ? list.sort((a, b) => b.weight - a.weight) : list)
             .map(list=>list || [])
             .do(list => commit(mt.SET_COMPANIES, list))
+            .switchMap(link=> GET(`posts`)
+                .do(posts => console.log('loaded', posts))
+                .map(posts => commit(mt.SET_POSTS, posts))
+            )
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Загрузка компании',text:error }
+                })
             );
     },
     [types.FETCH_COMPANY]: ({commit},companyId)=> {
@@ -28,7 +34,9 @@ export default {
             .do(model => console.log(types.FETCH_COMPANY, model))
             .do(model => commit(mt.SET_COMPANY, model))
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Загрузка компаний',text:error }
+                })
             );
     },
     [types.CREATE_COMPANY_LINK]: ({commit, getters}, params)=> {
@@ -44,7 +52,9 @@ export default {
                 .map(company => commit(mt.SET_COMPANY_LINK, {company, link}))
             )
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Создание ссылки',text:error }
+                })
             );
     },
     [types.UPDATE_COMPANY_LINK]: ({commit, getters}, params)=> {
@@ -60,7 +70,9 @@ export default {
                 .map(company => commit(mt.SET_COMPANY_LINK, {company, link}))
             )
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Изменение ссылки',text:error }
+                })
             );
     }
 };

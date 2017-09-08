@@ -9,10 +9,11 @@ import * as mt from './types';
 export default {
 
     [mt.SET_COMPANIES]: (state, list) => {
-        state.companies.map = list.reduce((items, item)=> {
-            items[item.id] = item;
-            return items;
-        }, {});
+        // state.companies.map = list.reduce((items, item)=> {
+        //     items[item.id] = item;
+        //     return items;
+        // }, {});
+        state.companies.map = {...list.map(item=>({[item.id]:item}))};
 
         state.companies.years = Array.from(
             new Set(list.reduce((years, company) => years.concat(company.years), []))
@@ -31,10 +32,16 @@ export default {
 
     },
 
+    [mt.SET_POSTS]: (state, list) => {
+        state.posts = list;
+    },
+    [mt.SET_POST]: (state, post) => {
+        const index = state.posts.findIndex(p=>p.id === post.id);
+        state.posts.splice(index >= 0 ? index : 0, index >= 0 ? 1 : 0, post);
+    },
     [mt.SET_COMPANY]: (state, model) => {
         state.companies.model = model;
     },
-
     [mt.SET_COMPANY_LINK]: (state, {company, link})=> {
         if (!company.links) Vue.set(company, 'links', []);
         const index = company.links.findIndex(l=>l.linkId === link.linkId);
@@ -62,7 +69,7 @@ export default {
     },
 
     [mt.LOADED]: (state, {name, error}) => {
-        Vue.set(state.messages,name,error);
+        Vue.set(state.messages,'error',error);
         Vue.set(state.loading,name,false);
         error ? console.error(name,error) : null;
     },

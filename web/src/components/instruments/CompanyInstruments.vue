@@ -70,7 +70,7 @@ export default {
                 this.$store.dispatch(CREATE_COMPANY_INSTRUMENT, this.model);
                 this.model = null;
             }
-        },
+        }
     }
 }
 </script>

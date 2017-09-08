@@ -11,6 +11,7 @@ export const years = ({companies}) => {
     return companies.years;
 };
 
+
 export const company = ({companies}) => {
     return companies.model;
 };
@@ -20,8 +21,11 @@ export const urls = ({urls}) => {
 };
 
 export const getCompany = ({companies}) => (id) => {
-    console.info('getCompany',id, companies.map[id]);
     return companies.map[id];
+};
+
+export const getPosts = ({posts}) => (companyId) => {
+    return posts.filter(post=>post.companyId === companyId);
 };
 
 //LINKS getters
@@ -37,6 +41,9 @@ export const infoLink = (state,{getLink})=>{
 };
 export const stockLink= (state,{getLink})=>{
     return getLink(5);
+};
+export const divLink= (state,{getLink})=>{
+    return getLink(4);
 };
 
 

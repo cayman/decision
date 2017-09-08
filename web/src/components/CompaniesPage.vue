@@ -1,8 +1,6 @@
 <template>
     <section class="main">
-        <pre>{{ loading }}</pre>
         <div is="alert-loader" :loading="loading"></div>
-        <!--<div is="alert-error" :error="error"></div>-->
 
         <!--<pre>{{ sectors }}</pre>-->
 
@@ -15,14 +13,21 @@
                 <thead>
                     <sector-header-row :sector="sector" :years="years" @name-click="toggle(sector)"></sector-header-row>
                 </thead>
-                <tbody v-for="company in sector.companies">
-                    <company-header-row :company="company" :years="years" @name-click="toggle(company)"></company-header-row>
-                    <template v-if="sector.expanded || company.expanded" v-for="indicator in company.indicators">
-                        <indicator-diagram-row v-if="indicator.digit && indicator.expanded" @name-click="toggle(indicator)"
-                                               :indicator="indicator" :years="years"></indicator-diagram-row>
-                        <indicator-row :indicator="indicator" :selected="indicator.expanded" :years="years" @name-click="toggle(indicator)"></indicator-row>
+                <template v-for="company in sector.companies">
+                    <tbody>
+                        <company-header-row :company="company" :years="years" @name-click="toggle(company)"></company-header-row>
+                    </tbody>
+                    <template v-if="sector.expanded || company.expanded" >
+                        <tbody>
+                            <template v-for="indicator in company.indicators">
+                                <indicator-diagram-row v-if="indicator.digit && indicator.expanded" @name-click="toggle(indicator)"
+                                                       :indicator="indicator" :years="years"></indicator-diagram-row>
+                                <indicator-row :indicator="indicator" :selected="indicator.expanded" :years="years" @name-click="toggle(indicator)"></indicator-row>
+                            </template>
+                        </tbody>
+                        <company-posts-row :company="company" :years="years"></company-posts-row>
                     </template>
-                </tbody>
+                </template>
                 <tfoot>
                     <sector-footer-row :sector="sector" :years="years"
                                    @collapse="toggle(sector)"></sector-footer-row>

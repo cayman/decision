@@ -1,7 +1,6 @@
 <template>
     <section class="main">
         <div is="alert-loader" :loading="loading"></div>
-        <!--<div is="alert-error" :error="error"></div>-->
 
         <h2>{{ company.name }}</h2>
         <table class="company">

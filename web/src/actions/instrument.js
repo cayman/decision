@@ -22,11 +22,14 @@ export default {
                 .map(company => commit(mt.SET_COMPANY_INSTRUMENT, {company, instrument}))
             )
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Создание инструмента компании',text:error }
+                })
             );
     },
     [types.UPDATE_COMPANY_INSTRUMENT]: ({commit,getters},params)=> {
-        mutations.loading(COMPANIES);
+        const name = 'instrument';
+        commit(mt.LOADING, {name});
         return POST(`companies/${params.companyId}/instruments/${params.id}`, params)
             .do(instrument => console.log(types.UPDATE_COMPANY_INSTRUMENT, instrument))
             .do(instrument => getters.getInstrumentType('instruments',instrument.typeId) ||
@@ -37,7 +40,9 @@ export default {
                 .map(company => commit(mt.SET_COMPANY_INSTRUMENT, {company, instrument}))
             )
             .subscribe(result => commit(mt.LOADED, {name}),
-                error => commit(mt.LOADED, {name, error})
+                error => commit(mt.LOADED, {name,
+                    error:{title:'Изменение инструмента компании',text:error
+                }})
             );
     }
 }

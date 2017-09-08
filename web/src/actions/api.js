@@ -14,7 +14,7 @@ import 'rxjs/observable/dom/AjaxObservable';
 const baseUrl = 'http://localhost:8080/api';
 
 export const GET = (localUrl) => {
-    const url = [baseUrl,localUrl].join('/') + '?json=true';
+    const url = [baseUrl,localUrl].join('/');
     console.log('url:', url);
     return Observable.ajax({
             url,

@@ -9,11 +9,14 @@
             <button @click="updateInstrument()">Save</button>
         </span>
         <span v-else>
-            <a :href="stockLink.instrumentUrl | url(instrument.code)" :target="target">
+            <a :href="stockLink.instrumentUrl | url(instrument.code.toUpperCase())" :target="target">
                 <img :src="stockLink.icon | icon" height="12px" width="12px">
             </a>
             <a :href="infoLink.instrumentUrl | url(instrument.id)" :target="target">
                 <img :src="infoLink.icon | icon" height="12px" width="12px">
+            </a>
+            <a :href="divLink.instrumentUrl | url(instrument.code.toLowerCase())" :target="target">
+                <img :src="divLink.icon | icon" height="12px" width="12px">
             </a>
             <a :href="stockLink.instrumentUrl | url(instrument.code)" :target="target">
                 {{ instrument.code }}
@@ -41,6 +44,9 @@ export default {
         },
         infoLink(){
             return this.$store.getters.infoLink;
+        },
+        divLink(){
+            return this.$store.getters.divLink;
         },
         stockLink(){
             return this.$store.getters.stockLink;
