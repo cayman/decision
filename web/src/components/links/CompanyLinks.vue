@@ -20,61 +20,61 @@
 </template>
 
 <script>
-import { CREATE_COMPANY_LINK } from 'actions';
-import { composeUrl } from 'actions/utils';
-import CompanyLink from './CompanyLink.vue';
+    import {CREATE_COMPANY_LINK} from 'actions/types';
+    import {composeUrl} from 'actions/utils';
+    import CompanyLink from './CompanyLink.vue';
 
-export default {
-    name: 'company-links',
-    props: ['company'],
-    components: {
-        CompanyLink
-    },
-    data () {
-        return {
-            model: null,
-            selectedLink: null
-        }
-    },
-    computed: {
-        urls() {
-            return this.$store.state.urls;
+    export default {
+        name: 'company-links',
+        props: ['company'],
+        components: {
+            CompanyLink
         },
-        links() {
-            return this.$store.state.dictionary.links;
+        data () {
+            return {
+                model: null,
+                selectedLink: null
+            }
         },
-        remainingLinks() {
-            const links = this.links.filter(_link=>
-                !this.company.links.some(compLink => compLink.linkId === _link.id));
-            this.selectedLink = links.length>0 ? links[0] : null;
-            return links;
-        }
-    },
-    mounted() {
-       // console.log(this.foo('hello')); // logs "hello"
-    },
-    methods: {
-        toggleAppendMode() {
-            this.model = this.model ? null : {companyId: this.company.id, linkId: null, id: null};
+        computed: {
+            urls() {
+                return this.$store.state.urls;
+            },
+            links() {
+                return this.$store.state.dictionary.links;
+            },
+            remainingLinks() {
+                const links = this.links.filter(_link=>
+                        !this.company.links.some(compLink => compLink.linkId === _link.id));
+                this.selectedLink = links.length > 0 ? links[0] : null;
+                return links;
+            }
         },
-        openSearchLink(input) {
-            const url = composeUrl(this.selectedLink ? this.selectedLink.searchUrl : this.urls.search,
-                    input || this.company.name);
-            window.open(url, '_search');
+        mounted() {
+            // console.log(this.foo('hello')); // logs "hello"
         },
-        createLink() {
-            if (this.model && this.selectedLink && this.model.id) {
-                this.model.linkId = this.selectedLink.id;
-                this.$store.dispatch(CREATE_COMPANY_LINK, this.model);
-                this.model = null;
+        methods: {
+            toggleAppendMode() {
+                this.model = this.model ? null : {companyId: this.company.id, linkId: null, id: null};
+            },
+            openSearchLink(input) {
+                const url = composeUrl(this.selectedLink ? this.selectedLink.searchUrl : this.urls.search,
+                        input || this.company.name);
+                window.open(url, '_search');
+            },
+            createLink() {
+                if (this.model && this.selectedLink && this.model.id) {
+                    this.model.linkId = this.selectedLink.id;
+                    this.$store.dispatch(CREATE_COMPANY_LINK, this.model);
+                    this.model = null;
+                }
             }
         }
     }
-}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    .links{
+    .links {
         text-align: left;
         width: auto;
     }

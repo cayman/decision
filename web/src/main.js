@@ -30,20 +30,12 @@ Vue.filter('decision', (value, num=2) => {
 import AlertLoader from './components/AlertLoader.vue';
 import AlertError from './components/AlertError.vue';
 
-import CompaniesHeaderRow from './components/table/CompaniesHeaderRow.vue';
-import CompanyHeaderRow from './components/table/CompanyHeaderRow.vue';
-import CompanyPostsRow from './components/blog/CompanyPostsRow.vue';
 
-import IndicatorRow from './components/indicators/IndicatorRow.vue';
-import IndicatorDiagramRow from './components/indicators/IndicatorDiagramRow.vue';
+
+
 
 Vue.component(AlertLoader.name, AlertLoader);
 Vue.component(AlertError.name, AlertError);
-Vue.component(CompaniesHeaderRow.name, CompaniesHeaderRow);
-Vue.component(CompanyHeaderRow.name, CompanyHeaderRow);
-Vue.component(CompanyPostsRow.name, CompanyPostsRow);
-Vue.component(IndicatorRow.name, IndicatorRow);
-Vue.component(IndicatorDiagramRow.name, IndicatorDiagramRow);
 
 
 /* eslint-disable no-new */

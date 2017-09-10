@@ -1,5 +1,4 @@
 <template>
-    <td nowrap>
         <svg  version="1.1"
               width="40" height="100"
               viewBox="0 0 40 100"
@@ -22,12 +21,11 @@
                 <rect x="0" :y="100+bottom/point - (top>0?1:0) " width="40" height="1" fill="rgba(40, 47, 143, 0.6)"  stroke="rgba(40, 47, 143, 0.9)" stroke-width="0"/>
             </g>
         </svg>
-    </td>
 </template>
 
 <script>
 export default {
-    name:'indicator-svg',
+    name:'indicator-diagram-axis',
     props: ['top', 'max', 'min', 'bottom', 'point'],
     data(){
         return {

@@ -1,14 +1,16 @@
 <template>
-    <tr class="sector_header">
-        <th :colspan="years.length+3" >
-            <span @click="nameClick()">{{ sector.name }} ({{ sector.companies.length }})</span>
-        </th>
-    </tr>
+    <tbody class="sectorHeader">
+        <tr>
+            <th :colspan="years.length+3" >
+                <span @click="nameClick()">{{ sector.name }} ({{ sector.companies.length }})</span>
+            </th>
+        </tr>
+    </tbody>
 </template>
 
 <script>
 export default {
-    name:'sector-header-row',
+    name:'sector-header',
     props: ['sector','years'],
     methods: {
         nameClick: function () {

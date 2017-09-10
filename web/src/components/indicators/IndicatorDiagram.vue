@@ -1,6 +1,6 @@
 <template>
-    <tr class="indicator_diagram">
-        <td class="indicator_name"  colspan="2">
+    <tr class="indicatorDiagram">
+        <td class="indicatorDiagram__name"  colspan="2">
             <a @click="nameClick">
                 {{ indicator.name }}
             </a>
@@ -11,16 +11,23 @@
             <div>bottom:{{ bottom }}</div>
             <div>point:{{ point }}</div>
         </td>
-        <indicator-svg  :top="top" :max="maxValue" min="minValue":bottom="bottom" :point="point"></indicator-svg>
-        <indicator-svg-cell  v-for="year in years" :key="year" :value="indicator.years[year]" :top="top/point" :bottom="bottom/point" :point="point"></indicator-svg-cell>
+        <td class="indicatorDiagram__axis">
+            <indicator-diagram-axis  :top="top" :max="maxValue" min="minValue":bottom="bottom" :point="point"></indicator-diagram-axis>
+        </td>
+        <td class="indicatorDiagram__value">
+            <indicator-diagram-value  v-for="year in years" :key="year" :value="indicator.years[year]" :top="top/point" :bottom="bottom/point" :point="point"></indicator-diagram-value>
+        </td>
     </tr>
 </template>
 
 <script>
-import IndicatorSvgCell from './IndicatorSvgCell.vue'
-import IndicatorSvg from './IndicatorSvg.vue'
+import IndicatorDiagramAxis from './IndicatorDiagramAxis.vue'
+import IndicatorDiagramValue from './IndicatorDiagramValue.vue'
 export default {
-    name:'indicator-diagram-row',
+    name:'indicator-diagram',
+    components: {
+        IndicatorDiagramValue, IndicatorDiagramAxis
+    },
     props: ['indicator','years'],
     data () {
         const reduce = (values, method) => Object.keys(values)
@@ -31,9 +38,7 @@ export default {
             minValue: reduce(this.indicator.years, (minValue,value) => value < minValue? value : minValue),
         }
     },
-    components: {
-        IndicatorSvgCell, IndicatorSvg
-    },
+
     computed: {
         top(){
             return this.maxValue > 0 ? this.maxValue : 0;
@@ -55,8 +60,14 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
 
-    .indicator_diagram {
+    .indicatorDiagram {
         text-align: center;
+
+        &__name {}
+        &__axis {}
+        &__value {}
+
+
     }
 
 </style>
