@@ -24,6 +24,10 @@
                 return this.$store.getters.getPosts(this.company.id);
             }
         },
+        mounted () {
+            // запрашиваем данные когда реактивное представление уже создано
+            this.posts.length >0 ? null : this.toggleAppendMode();
+        },
         methods:{
             toggleAppendMode() {
                 this.model = this.model ? null : {companyId: this.company.id, userId: 1, id: null, text:null};
@@ -33,15 +37,5 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
-    .indicator_name {
-        .unit{
-            color: #bbb5b5;
-        }
-        .weight {
-            font-size: 7px;
-            color: #4f6b72;
-        }
-    }
 
 </style>

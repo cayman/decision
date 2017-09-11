@@ -13,7 +13,7 @@ export default {
         //     items[item.id] = item;
         //     return items;
         // }, {});
-        state.companies.map = {...list.map(item=>({[item.id]:item}))};
+        state.companies.map = Object.assign({},...list.map(item=>({[item.id]:item})));
 
         state.companies.years = Array.from(
             new Set(list.reduce((years, company) => years.concat(company.years), []))

@@ -1,5 +1,9 @@
 <template>
-    <span class="links">
+    <span class="companyLinks">
+                <!--add new link button-->
+        <span @click="toggleAppendMode()">
+            <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+        </span>
         <!--add new link form-->
         <span v-if="model">
             <select v-model="selectedLink">
@@ -11,11 +15,10 @@
             <button @click="createLink()">Save</button>
         </span>
         <!--show exist link-->
-        <company-link v-for="companyLink in company.links"
+        <company-link v-for="companyLink in companyLinks"
                       :key="companyLink.linkId" :company-link="companyLink"
                       :company-name="company.name" target="_detail"></company-link>
-        <!--add new link button-->
-        <span @click="toggleAppendMode()">+L</span>
+
     </span>
 </template>
 
@@ -40,8 +43,11 @@
             urls() {
                 return this.$store.state.urls;
             },
+            companyLinks() {
+                return [...this.company.links].sort((a, b)=>a.linkId-b.linkId);
+            },
             links() {
-                return this.$store.state.dictionary.links;
+                return this.$store.state.dictionary.links.sort((a, b)=>a.linkId-b.linkId);
             },
             remainingLinks() {
                 const links = this.links.filter(_link=>
@@ -74,7 +80,8 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    .links {
+    .companyLinks {
+        padding-left: 5px;
         text-align: left;
         width: auto;
     }

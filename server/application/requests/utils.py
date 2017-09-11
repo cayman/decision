@@ -26,6 +26,7 @@ def created(dto):
     return make_response(jsonify(response)), 201
 
 def accepted(dto):
+    response = dto.json()
     return make_response(jsonify(response)), 202
 
 

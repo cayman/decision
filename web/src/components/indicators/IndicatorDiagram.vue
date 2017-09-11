@@ -14,8 +14,8 @@
         <td class="indicatorDiagram__axis">
             <indicator-diagram-axis  :top="top" :max="maxValue" min="minValue":bottom="bottom" :point="point"></indicator-diagram-axis>
         </td>
-        <td class="indicatorDiagram__value">
-            <indicator-diagram-value  v-for="year in years" :key="year" :value="indicator.years[year]" :top="top/point" :bottom="bottom/point" :point="point"></indicator-diagram-value>
+        <td class="indicatorDiagram__value" v-for="year in years" :key="year">
+            <indicator-diagram-value  :value="indicator.years[year]" :top="top/point" :bottom="bottom/point" :point="point"></indicator-diagram-value>
         </td>
     </tr>
 </template>
@@ -59,12 +59,17 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
+    @import "../../assets/style.scss";
     .indicatorDiagram {
+        font: $table_base_fonts;
         text-align: center;
 
-        &__name {}
-        &__axis {}
+        &__name {
+            width: $col_name_width;
+        }
+        &__axis {
+            width: $col_axis_width;
+        }
         &__value {}
 
 

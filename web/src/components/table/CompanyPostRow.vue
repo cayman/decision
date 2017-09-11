@@ -1,8 +1,8 @@
 <template>
-    <tr class="company_posts" >
+    <tr class="companyPosts" >
         <td>
-            <span v-if="post.id">{{ post.id }}</span>
-            <span v-else> Блог </span>
+            <span v-if="post.id"><i class="fa fa-comment-o" aria-hidden="true"></i>{{ post.id }}</span>
+            <span v-else><i class="fa fa-comments-o" aria-hidden="true"></i></span>
         </td>
         <td colspan="2">
             <span>{{ post.created }}</span>
@@ -18,8 +18,8 @@
                 <button @click="updatePost()">Save</button>
             </span>
             <span v-else>
-                <span @click="toggleEditMode()">E</span>
-                <span @click="toggleAddMode()">A</span>
+                <span @click="toggleEditMode()"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                <span @click="toggleAddMode()"><i class="fa fa-plus" aria-hidden="true"></i></span>
             </span>
 
 
@@ -60,15 +60,9 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
-    .indicator_name {
-        .unit{
-            color: #bbb5b5;
-        }
-        .weight {
-            font-size: 7px;
-            color: #4f6b72;
-        }
+    @import "../../assets/style.scss";
+    .companyPosts {
+        font: $table_base_fonts;
     }
 
 </style>

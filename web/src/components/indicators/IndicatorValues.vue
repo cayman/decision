@@ -4,7 +4,11 @@
             <a @click="nameClick()" :class="{ selected }">{{ indicator.id }}</a>
         </td>
         <td class="indicatorValues__name" colspan="2" nowrap>
-            <a @click="nameClick()" :class="{ selected }">{{ indicator.name }}</a>
+            <a @click="nameClick()" :class="{ selected }">
+                <!--<i class="fa fa-bar-chart" aria-hidden="true"></i>-->
+                <i class="fa fa-linode" aria-hidden="true"></i>
+                {{ indicator.name }}
+            </a>
             <span class="unit">({{ unit }})</span>
             <span class="weight positive" v-if="indicator.weight>0">{{ indicator.weight | decision }}</span>
             <span class="weight negative" v-else-if="indicator.weight<0" >{{ indicator.weight | decision }}</span>
@@ -39,18 +43,23 @@
     @import "../../assets/style.scss";
 
     .indicatorValues {
+        font: $table_base_fonts;
+
         &__num{
-            width: 20px;
-            background-color: #eeeeee;
-            font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+            width: $col_num_width;
+            color: $font-color;
         }
         &__name {
+            white-space: nowrap;
+            width: $col_name_width;
+            color: $font-color;
+            font-weight: bold;
             .unit{
-                color: #bbb5b5;
+                color: $unit_color;
             }
             .weight {
-                font-size: 7px;
-                color: #4f6b72;
+                font-size: 8px;
+                color: $font-color;
             }
             .positive{
                 background-color: $positive_background;
@@ -63,25 +72,29 @@
                 /*background-color: #fce9e3;*/
             }
         }
+
+        .empty{
+            background-color: $empty_background;
+        }
+        //
+        .positive{
+            background-color: $positive_background;
+            white-space: nowrap
+        }
+        //
+        .negative{
+            background-color: $negative_background;
+            white-space: nowrap
+            /*background-color: #fce9e3;*/
+        }
+        //
+        .zero{
+            background-color: $zero_background;
+        }
+
         &__value {
-            .empty{
-              background-color: $empty_background;
-            }
-            //
-            .positive{
-              background-color: $positive_background;
-              white-space: nowrap
-            }
-            //
-            .negative{
-              background-color: $negative_background;
-              white-space: nowrap
-              /*background-color: #fce9e3;*/
-            }
-            //
-            .zero{
-              background-color: $zero_background;
-            }
+            color: $font-color3;
+
         }
         
     }

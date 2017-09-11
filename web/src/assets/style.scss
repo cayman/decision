@@ -1,16 +1,25 @@
 $border_color: #C1DAD7;
 $font_color: #4f6b72;
 $font_color2: #377ba8;
+$font_color3: black;
+$unit_color: #bbb5b5;
 $caption_color: #CAE8EA;
 $caption_color2: #d6e5e5;
 $caption_color3: #eee;
+$caption_color4: #7699A0;
 $background_color: #fff;
 
-$col1-width: 20px;
-$col2-width: 100px;
-$col3-width: 20px;
+
+$table_fonts_size: 12px;
+$col_num_width: 20px;
+$col_name_width: 140px;
+$col_axis_width: 20px;
 
 $table_fonts: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+
+$table_base_fonts: 12px $table_fonts;
+$table_name_fonts: 13px $table_fonts;
+$table_small_fonts: 11px $table_fonts;
 
 $positive_background:#e4fcdd;
 $negative_background: #fcdee8;

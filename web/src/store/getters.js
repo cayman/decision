@@ -21,6 +21,7 @@ export const urls = ({urls}) => {
 };
 
 export const getCompany = ({companies}) => (id) => {
+    console.log('getCompany',id,'=',companies.map[id]);
     return companies.map[id];
 };
 

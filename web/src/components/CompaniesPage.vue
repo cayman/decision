@@ -82,23 +82,9 @@
         margin: 0;
         tr {
             td, th {
-                font: 11px $table_fonts;
-                border-right: 1px solid $border_color;
-                border-bottom: 1px solid $border_color;
-                background: $background_color;
-                padding: 3px 2px 3px 2px;
-                color: $font_color;
-                text-align: left;
-                width: auto;
-            }
-
-            th {
-                font-weight: bold;
-                letter-spacing: 2px;
-                text-transform: uppercase;
-                text-align: left;
-                padding: 6px 6px 6px 12px;
-                background: $caption_color3;
+                    border-right: 1px solid $border_color;
+                    border-bottom: 1px solid $border_color;
+                    padding: 3px 2px 3px 2px;
             }
         }
 

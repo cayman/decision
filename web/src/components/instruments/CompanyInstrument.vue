@@ -1,6 +1,6 @@
 <template>
-    <span>
-        <strong @dblclick="toggleEditModel()">{{ type.short }}</strong>
+    <span class="companyInstrument">
+        <strong class="companyInstrument__name" @dblclick="toggleEditModel()">{{ type.short }}</strong>
         <span v-if="model">
             <input type="text" size="6" v-model.number.trim="model.id"
                    @dblclick="openSearchLink(model.id)"/>
@@ -9,6 +9,9 @@
             <button @click="updateInstrument()">Save</button>
         </span>
         <span v-else>
+            <a :href="stockLink.instrumentUrl | url(instrument.code)" :target="target">
+                {{ instrument.code }}
+            </a>
             <a :href="stockLink.instrumentUrl | url(instrument.code.toUpperCase())" :target="target">
                 <img :src="stockLink.icon | icon" height="12px" width="12px">
             </a>
@@ -18,9 +21,7 @@
             <a :href="divLink.instrumentUrl | url(instrument.code.toLowerCase())" :target="target">
                 <img :src="divLink.icon | icon" height="12px" width="12px">
             </a>
-            <a :href="stockLink.instrumentUrl | url(instrument.code)" :target="target">
-                {{ instrument.code }}
-            </a>
+
         </span>
         <span>&nbsp; &nbsp;</span>
     </span>
@@ -67,3 +68,25 @@ export default {
     }
 }
 </script>
+
+
+<style rel="stylesheet/scss" lang="scss">
+
+    @import "../../assets/style.scss";
+
+    .companyInstrument {
+        font: $table_base_fonts;
+        border-top: 1px solid $background_color;
+        border-left: 1px solid $background_color;
+        border-bottom: 1px solid $caption_color4;
+        border-right: 1px solid $caption_color4;
+        margin-right: 5px;
+        padding: 1px;
+
+        &__name{
+            //  background-color: $caption_color3;
+        }
+    }
+
+
+</style>

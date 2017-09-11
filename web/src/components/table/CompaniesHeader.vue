@@ -1,8 +1,8 @@
 <template>
     <thead class="companiesHeader">
         <tr>
-            <td colspan="3" class="companiesHeade__name" >{{ title }}</td>
-            <td v-for="year in years" class="companiesHeade__year">{{ year }}</td>
+            <td colspan="3" class="companiesHeader__name" >{{ title }}</td>
+            <td v-for="year in years" class="companiesHeader__year">{{ year }}</td>
         </tr>
     </thead>
 </template>
@@ -20,26 +20,22 @@ export default {
     @import "../../assets/style.scss";
 
     .companiesHeader {
+        font: bold $table_base_fonts;
+
         &__name{
-            background-color: #eeeeee;
+            background-color: $caption_color3;
+            width: calc(#{$col_num_width} + #{$col_name_width});
         }
         &__year{
-            background-color: #eeeeee;
+            background-color: $caption_color3;
         }
 
         tr {
             td:nth-child(1) {
-                width: ($col1-width + $col2-width + $col3-width);
+                //width: ($col1-width + $col2-width + $col3-width);
             }
         }
     }
-    td.caption {
-        font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-        background-color: #eeeeee;
 
-        a {
-            color: #26405d;
-        }
-    }
 
 </style>

@@ -1,5 +1,9 @@
 <template>
     <span class="instruments">
+                <!--add new instrument button-->
+        <span @click="toggleAppendMode()">
+            <i class="fa fa-line-chart" aria-hidden="true"></i>
+        </span>
         <!--add new link form-->
         <span v-if="model">
             <select v-model="selectedType">
@@ -14,11 +18,10 @@
             <button @click="createInstrument()">Save</button>
         </span>
 
-        <company-instrument v-for="instrument in company.instruments"
+        <company-instrument v-for="instrument in companyInstruments"
                       :key="instrument.typeId" :instrument="instrument"
                       :company-name="company.name" target="_detail"></company-instrument>
-        <!--add new instrument button-->
-        <span @click="toggleAppendMode()">+I</span>
+
     </span>
 </template>
 
@@ -42,6 +45,9 @@ export default {
     computed: {
         infoLink(){
             return this.$store.getters.infoLink;
+        },
+        companyInstruments() {
+            return [...this.company.instruments].sort((a, b)=>a.typeId-b.typeId);
         },
         types(){
             return this.$store.getters.instrumentTypes;

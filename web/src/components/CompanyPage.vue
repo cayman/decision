@@ -64,10 +64,16 @@
 
 <style rel="stylesheet/scss" lang="scss">
 
+    @import "../assets/style.scss";
     table.company {
         width: 1000px;
-
-
+        tr {
+            td, th {
+                border-right: 1px solid $border_color;
+                border-bottom: 1px solid $border_color;
+                padding: 3px 2px 3px 2px;
+            }
+        }
 
     }
 
