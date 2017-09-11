@@ -10,10 +10,10 @@ const restPort = process.env.REST_PORT || '5000';
 
 module.exports = {
     context: path.resolve(process.cwd(), 'src'),
-    entry:{
-        vue: ['vue', 'vue-router','vue-notification','vuex'],
-        rx: [ 'rxjs'],
-        polyfill: [ 'babel-polyfill'],
+    entry: {
+        vue: ['vue', 'vue-router', 'vue-notification', 'vuex'],
+        rx: ['rxjs'],
+        polyfill: ['babel-polyfill'],
         main: './main.js',
     },
     output: {
@@ -24,10 +24,10 @@ module.exports = {
     resolve: {
         alias: {
             'vue$': 'vue/dist/vue.esm.js',
-             styles: 'assets/styles',
-             assets: path.resolve(process.cwd(),'src/assets'),
-             actions: path.resolve(process.cwd(),'src/actions'),
-             components: path.resolve(process.cwd(),'src/components')
+            assets: path.resolve(process.cwd(), 'src/assets'),
+            actions: path.resolve(process.cwd(), 'src/actions'),
+            store: path.resolve(process.cwd(), 'src/store'),
+            components: path.resolve(process.cwd(), 'src/components')
         }
     },
     module: {
@@ -36,7 +36,7 @@ module.exports = {
                 test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use:['css-loader','sass-loader']
+                    use: ['css-loader', 'sass-loader']
                 })
             },
             {
@@ -67,13 +67,13 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
-            name: ['rx','vue','polyfill'],
-            filename:'[name].bundle.js'
+            name: ['rx', 'vue', 'polyfill'],
+            filename: '[name].bundle.js'
         }),
         new ExtractTextPlugin('style.bundle.css'),
         new webpack.ProgressPlugin(),
         new CopyWebpackPlugin([
-            { from: 'assets' }
+            {from: 'assets'}
         ])
     ],
     devServer: {
@@ -81,7 +81,7 @@ module.exports = {
         noInfo: true,
         proxy: [{
             context: ['/api/**'],
-            target:'http://' + restHost + ':' + restPort,
+            target: 'http://' + restHost + ':' + restPort,
             secure: false
         }]
     },

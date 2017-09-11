@@ -140,15 +140,21 @@ def update_company_links(company_id,link_id):
             return not_found_error('Company not found')
 
         else:
-            db.session.update(link.model())
-            db.session.commit()
-            _link = CompanyLink.query \
-                .filter(CompanyLink.company_id == link.company_id) \
-                .filter(CompanyLink.link_id == link.link_id).one()
-            #dto
-            link = CompanyLinkDTO(_link)
-            app.logger.debug(link)
-            return accepted(link)
+            _link = CompanyLink.query\
+                .filter(CompanyLink.company_id == company_id)\
+                .filter(CompanyLink.link_id == link_id).one()
+
+            if not _company:
+                app.logger.info('CompanyLink not found %r:%r',company_id,link_id)
+                return not_found_error('CompanyLink not found')
+            else:
+                _link.id = link.id
+                db.session.commit()
+
+                #dto
+                link = CompanyLinkDTO(_link)
+                app.logger.debug(link)
+                return accepted(link)
 
     except AssertionError as e:
         app.logger.info(e)

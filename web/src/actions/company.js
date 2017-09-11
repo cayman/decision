@@ -48,7 +48,7 @@ export default {
                 Observable.throw(new Error(`Ссылка ${link.linkId} не найдена в справочнике`)))
             .switchMap(link=> Observable.of(link.companyId)
                 .map(companyId => getters.getCompany(companyId)
-                || Observable.throw(new Error(`Компания ${companyId} не найдена`)))
+                    || Observable.throw(new Error(`Компания ${companyId} не найдена`)))
                 .map(company => commit(mt.SET_COMPANY_LINK, {company, link}))
             )
             .subscribe(result => commit(mt.LOADED, {name}),
@@ -66,7 +66,7 @@ export default {
                 Observable.throw(new Error(`Ссылка ${link.linkId} не найдена в справочнике`)))
             .switchMap(link=> Observable.of(link.companyId)
                 .map(companyId => getters.getCompany(companyId)
-                || Observable.throw(new Error(`Компания ${companyId} не найдена в справочнике`)))
+                    || Observable.throw(new Error(`Компания ${companyId} не найдена в справочнике`)))
                 .map(company => commit(mt.SET_COMPANY_LINK, {company, link}))
             )
             .subscribe(result => commit(mt.LOADED, {name}),

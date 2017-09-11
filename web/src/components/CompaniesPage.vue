@@ -1,104 +1,90 @@
 <template>
     <section class="main">
         <div is="alert-loader" :loading="loading"></div>
-
         <!--<pre>{{ sectors }}</pre>-->
-
         <table class="companies">
             <caption>Список компаний</caption>
-            <thead>
-                <companies-header-row title="Название" :years="years"></companies-header-row>
-            </thead>
+            <companies-header title="Название" :years="years"></companies-header>
             <template v-for="(sector,key) in sectors">
-                <thead>
-                    <sector-header-row :sector="sector" :years="years" @name-click="toggle(sector)"></sector-header-row>
-                </thead>
+                <sector-header :sector="sector" :years="years" @name-click="toggle(sector)"></sector-header>
                 <template v-for="company in sector.companies">
-                    <tbody>
-                        <company-header-row :company="company" :years="years" @name-click="toggle(company)"></company-header-row>
-                    </tbody>
-                    <template v-if="sector.expanded || company.expanded" >
-                        <tbody>
-                            <template v-for="indicator in company.indicators">
-                                <indicator-diagram-row v-if="indicator.digit && indicator.expanded" @name-click="toggle(indicator)"
-                                                       :indicator="indicator" :years="years"></indicator-diagram-row>
-                                <indicator-row :indicator="indicator" :selected="indicator.expanded" :years="years" @name-click="toggle(indicator)"></indicator-row>
-                            </template>
-                        </tbody>
-                        <company-posts-row :company="company" :years="years"></company-posts-row>
+                    <company-header :company="company" :years="years" @name-click="toggle(company)"></company-header>
+                    <template v-if="sector.expanded || company.expanded">
+                        <company-indicators :company="company" :years="years"></company-indicators>
+                        <company-posts :company="company" :years="years"></company-posts>
                     </template>
                 </template>
-                <tfoot>
-                    <sector-footer-row :sector="sector" :years="years"
-                                   @collapse="toggle(sector)"></sector-footer-row>
-                </tfoot>
+                <sector-footer :sector="sector" :years="years" @collapse="toggle(sector)"></sector-footer>
             </template>
         </table>
     </section>
 </template>
 
 <script>
-import { FETCH_COMPANIES } from '../actions';
-import {  TOGGLE  } from '../store/types';
-import SectorHeaderRow from './sectors/SectorHeaderRow.vue';
-import SectorFooterRow from './sectors/SectorFooterRow.vue';
+    import {FETCH_COMPANIES} from 'actions/types';
+    import {TOGGLE} from 'store/types';
+    import CompaniesHeader from 'components/table/CompaniesHeader.vue';
+    import SectorHeader from 'components/table/SectorHeader.vue';
+    import CompanyHeader from 'components/table/CompanyHeader.vue';
+    import CompanyIndicators from 'components/table/CompanyIndicators.vue';
+    import CompanyPosts from 'components/table/CompanyPosts.vue';
+    import SectorFooter from 'components/table/SectorFooter.vue';
 
-export default {
-    name: 'companies-page',
-    components: {
-        SectorHeaderRow, SectorFooterRow
-    },
-    computed: {
-        sectors(){
-            return this.$store.state.companies.sectors;
+    export default {
+        name: 'companies-page',
+        components: {
+            CompaniesHeader, SectorHeader, CompanyHeader, CompanyIndicators, CompanyPosts, SectorFooter
         },
-        years(){
-            return this.$store.state.companies.years;
+        computed: {
+            sectors(){
+                return this.$store.state.companies.sectors;
+            },
+            years(){
+                return this.$store.state.companies.years;
+            },
+            loading(){
+                return this.$store.state.loading.companies;
+            },
         },
-        loading(){
-            return this.$store.state.loading.companies;
+        created () {
+            // запрашиваем данные когда реактивное представление уже создано
+            this.fetchCompanies();
         },
-    },
-    created () {
-        // запрашиваем данные когда реактивное представление уже создано
-        this.fetchCompanies();
-    },
-    watch: {
-        // в случае изменения маршрута запрашиваем данные вновь
-        '$route': 'fetchCompanies'
-    },
-    beforeRouteUpdate (to, from, next) {
-         console.log('Company page');
-         //   // обработка изменений параметров пути...
-         //   // не забудьте вызывать
-         next();
-    },
-    methods: {
-        fetchCompanies(){
-            this.$store.dispatch(FETCH_COMPANIES);
+        watch: {
+            // в случае изменения маршрута запрашиваем данные вновь
+            '$route': 'fetchCompanies'
         },
-        toggle(entity){
-            this.$store.commit(TOGGLE,entity);
+        beforeRouteUpdate (to, from, next) {
+            console.log('Company page');
+            //   // обработка изменений параметров пути...
+            //   // не забудьте вызывать
+            next();
+        },
+        methods: {
+            fetchCompanies(){
+                this.$store.dispatch(FETCH_COMPANIES);
+            },
+            toggle(entity){
+                this.$store.commit(TOGGLE, entity);
+            }
         }
-    }
-};
+    };
 </script>
 
 
 <style rel="stylesheet/scss" lang="scss">
 
+    @import "../assets/style.scss";
+
     table.companies {
         width: 1000px;
-
+        padding: 0;
+        margin: 0;
         tr {
-            td:nth-child(1){
-                width: 20px;
-            }
-            td:nth-child(2){
-                width: 100px;
-            }
-            td:nth-child(3){
-                width: 20px;
+            td, th {
+                    border-right: 1px solid $border_color;
+                    border-bottom: 1px solid $border_color;
+                    padding: 3px 2px 3px 2px;
             }
         }
 
