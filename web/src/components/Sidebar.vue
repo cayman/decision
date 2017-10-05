@@ -1,12 +1,16 @@
 <template>
-    <aside class="sidebar">
+
+    <div>
+
         <ul>
             <li><router-link :to="{ name:'companies'}">Компании</router-link></li>
             <template v-for="sector in allSectors">
                 <li><router-link :to="{ name: 'companies', query: { sector: sector.id }}">{{ sector.name }}</router-link></li>
             </template>
         </ul>
-    </aside>
+
+    </div>
+
 </template>
 
 <script>

@@ -1,7 +1,10 @@
 import 'babel-polyfill'
 import Vue from 'vue';
 import Vuex from 'vuex';
-import Notifications from 'vue-notification'
+import Notifications from 'vue-notification';
+import Vuetify from 'vuetify';
+
+import 'vuetify/dist/vuetify.min.css';
 
 import App from './components/App.vue'
 import router from './router'
@@ -10,6 +13,8 @@ import {composeIconUrl,composeUrl} from './actions/utils'
 
 Vue.config.productionTip = false;
 Vue.use(Notifications);
+Vue.use(Vuetify);
+
 
 Vue.filter('url', (baseUrl, params) => {
     const url = composeUrl(baseUrl, params);

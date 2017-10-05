@@ -66,7 +66,7 @@
 
     @import "../assets/style.scss";
     table.company {
-        width: 1000px;
+        width: 100%;
         tr {
             td, th {
                 border-right: 1px solid $border_color;

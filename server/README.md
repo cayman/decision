@@ -2,7 +2,6 @@ Packages
 
 pip install flask
 pip install flask_sqlalchemy
-pip install flask_assets
 
 
 apt-get install python-mysql.connector
@@ -23,3 +22,8 @@ export FDB_PASSWORD=password
 
 CP=>Управление СУБД MySQL
 add host xx.xxx.175.18
+
+
+Виртуальное окружение
+sudo pip install virtualenv
+virtualenv venv

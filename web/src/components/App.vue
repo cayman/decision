@@ -1,23 +1,39 @@
 <template>
-    <div class="container" id="app">
-        <header>
-            <nav>
-                <li>
-                    <router-link :to="{ name:'home'}"><h1>ResFin</h1></router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name:'companies'}">Компании</router-link>
-                </li>
-            </nav>
-            <a class="auth">log in</a>
-        </header>
+    <div id="app">
+        <v-app>
+            <v-navigation-drawer persistent clipped app v-model="drawer">
+                <router-view name="sidebar"></router-view>
+            </v-navigation-drawer>
 
-        <div class="main-wrapper">
-            <router-view></router-view>
-            <router-view name="sidebar"></router-view>
-        </div>
+            <v-toolbar class="blue darken-3" dark app clipped-left fixed>
+                <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+                    <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+                    <router-link :to="{ name:'home'}">ResFin</router-link>
+                </v-toolbar-title>
+                <v-text-field solo prepend-icon="search" placeholder="Search"></v-text-field>
+                <v-spacer></v-spacer>
+                <v-btn icon>
+                    <v-icon>apps</v-icon>
+                </v-btn>
+                <v-btn icon>
+                    <v-icon>notifications</v-icon>
+                </v-btn>
+                <v-btn icon>
+                    <v-icon>contacts</v-icon>
+                </v-btn>
+            </v-toolbar>
 
-        <footer></footer>
+            <main>
+                <v-container>
+                    <v-layout>
+                        <v-flex xs12>
+                            <router-view></router-view>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </main>
+        </v-app>
+
         <notifications group="top" position="top right"/>
 
     </div>
@@ -29,6 +45,9 @@
 
     export default {
         name: 'app',
+        data: () => ({
+            drawer: true,
+        }),
         computed: {
             error(){
                 return this.$store.state.messages.error;
@@ -55,6 +74,9 @@
             }
         },
         methods: {
+            toggleSidenav() {
+                this.$refs.sidenav.toggle();
+            },
             notify({title,text},type='error'){
                 this.$notify({ group: 'top', duration: -1,
                     title,
@@ -74,36 +96,5 @@
 
     @import "../assets/style.scss";
 
-    .container {
-        display: flex;
-        flex-direction: column;
-    }
-
-    header {
-        display: flex;
-        justify-content: space-between;
-
-        nav {
-            display: flex;
-            align-items: baseline;
-        }
-    }
-
-    .main-wrapper {
-        display: flex;
-        flex-direction: row;
-        @media (max-width: 600px) {
-            flex-direction: column;
-        }
-    }
-
-    .main {
-        flex: 3;
-        margin-right: 60px;
-        @media (max-width: 600px) {
-            margin-right: 0;
-            margin-bottom: 60px;
-        }
-    }
 
 </style>

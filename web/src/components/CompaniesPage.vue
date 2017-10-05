@@ -77,7 +77,7 @@
     @import "../assets/style.scss";
 
     table.companies {
-        width: 1000px;
+        width: 100%;
         padding: 0;
         margin: 0;
         tr {
