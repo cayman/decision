@@ -86,6 +86,9 @@ module.exports = {
     devServer: {
         historyApiFallback: true,
         noInfo: true,
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        },
         proxy: [{
             context: ['/api/**'],
             target: 'http://' + restHost + ':' + restPort,
